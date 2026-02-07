@@ -58,31 +58,31 @@ export default function StepSummary() {
     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
       
       <div className="mb-2">
-        <h2 className="text-2xl font-bold text-gray-900">Récapitulatif</h2>
-        <p className="text-gray-500">Vérifiez les détails avant l'envoi. Nous vous appellerons pour le devis.</p>
+        <h2 className="text-2xl font-bold text-slate-900">Récapitulatif</h2>
+        <p className="text-slate-500">Vérifiez les détails avant l'envoi. Nous vous appellerons pour le devis.</p>
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5 space-y-5">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-5">
         
         <div className="flex justify-between items-start">
             <div>
-                <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
+                <h3 className="font-bold text-slate-900 text-lg flex items-center gap-2">
                     {cleaningTypeLabels[property.cleaningType] || "Nettoyage"} 
-                    {property.cleaningType === 'deep' && <Sparkles className="h-4 w-4 text-purple-500" />}
+                    {property.cleaningType === 'deep' && <Sparkles className="h-4 w-4 text-indigo-500" />}
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-slate-500 mt-1">
                     {typeLabels[property.type]} • {property.rooms} Pièces • {property.bathrooms} SDB
                 </p>
             </div>
-            <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-bold text-cyan-700 uppercase tracking-wide">
+            <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-teal-700 uppercase tracking-wide">
                 {frequencyLabels[schedule.frequency]}
             </span>
         </div>
         
-        <div className="h-px bg-gray-200" />
+        <div className="h-px bg-slate-100" />
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className={`rounded-lg p-3 text-sm font-medium border ${!property.hasSupplies ? 'bg-orange-50 border-orange-100 text-orange-800' : 'bg-green-50 border-green-100 text-green-800'}`}>
+            <div className={`rounded-lg p-3 text-sm font-medium border ${!property.hasSupplies ? 'bg-orange-50 border-orange-100 text-orange-800' : 'bg-emerald-50 border-emerald-100 text-emerald-800'}`}>
                 {property.hasSupplies ? (
                     <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4"/> Matériel fourni par le client</span>
                 ) : (
@@ -91,10 +91,10 @@ export default function StepSummary() {
             </div>
 
             {property.extras && property.extras.length > 0 && (
-                 <div className="rounded-lg bg-white border border-gray-200 p-3 text-sm text-gray-700 flex flex-wrap gap-2 items-center">
-                    <span className="font-bold text-xs text-gray-400 uppercase mr-1">Options:</span>
+                 <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-sm text-slate-700 flex flex-wrap gap-2 items-center">
+                    <span className="font-bold text-xs text-slate-400 uppercase mr-1">Options:</span>
                     {property.extras.map(extra => (
-                        <span key={extra} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                        <span key={extra} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-white border border-slate-200 text-slate-700">
                             {extraLabels[extra] || extra}
                         </span>
                     ))}
@@ -102,44 +102,44 @@ export default function StepSummary() {
             )}
         </div>
         
-        <div className="h-px bg-gray-200" />
+        <div className="h-px bg-slate-100" />
         
         <div className="space-y-3 text-sm">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
-                <div className="flex items-center gap-3 text-gray-700">
-                    <Calendar className="h-4 w-4 text-cyan-600 flex-shrink-0" />
+                <div className="flex items-center gap-3 text-slate-700">
+                    <Calendar className="h-4 w-4 text-teal-600 flex-shrink-0" />
                     <span className="capitalize font-semibold">
                       {renderDate()}
                     </span>
                 </div>
-                <div className="flex items-center gap-3 text-gray-700">
-                    <span className="text-gray-300 hidden sm:inline">|</span>
-                    <span className="font-medium text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded">
+                <div className="flex items-center gap-3 text-slate-700">
+                    <span className="text-slate-300 hidden sm:inline">|</span>
+                    <span className="font-medium text-teal-800 bg-teal-50 px-2 py-0.5 rounded">
                         {schedule.startTime} - {schedule.endTime}
                     </span>
                 </div>
             </div>
             
-            <div className="flex items-center gap-3 text-gray-700">
-                <MapPin className="h-4 w-4 text-cyan-600 flex-shrink-0" />
+            <div className="flex items-center gap-3 text-slate-700">
+                <MapPin className="h-4 w-4 text-teal-600 flex-shrink-0" />
                 <span className="truncate max-w-[250px]">
                     {property.address || "Adresse non fournie"}
                 </span>
             </div>
-             <div className="flex items-center gap-3 text-gray-700">
-                <CheckCircle2 className="h-4 w-4 text-cyan-600 flex-shrink-0" />
+             <div className="flex items-center gap-3 text-slate-700">
+                <CheckCircle2 className="h-4 w-4 text-teal-600 flex-shrink-0" />
                 <span>Contact : <span className="font-semibold">{contact.name}</span> ({contact.phone})</span>
             </div>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-cyan-100 bg-cyan-50/50 p-5 flex gap-4 items-start">
-         <div className="mt-1 flex-shrink-0 rounded-full bg-cyan-100 p-2 text-cyan-600">
+      <div className="rounded-2xl border border-teal-100 bg-teal-50/50 p-5 flex gap-4 items-start">
+         <div className="mt-1 flex-shrink-0 rounded-full bg-teal-100 p-2 text-teal-600">
             <Phone className="h-5 w-5" />
          </div>
          <div className="space-y-1">
-            <h4 className="font-bold text-cyan-900">Dernière étape : Devis par téléphone</h4>
-            <p className="text-sm text-cyan-800 leading-relaxed">
+            <h4 className="font-bold text-teal-900">Dernière étape : Devis par téléphone</h4>
+            <p className="text-sm text-teal-800 leading-relaxed">
                 Notre équipe vous appellera au <strong>{contact.phone}</strong> très rapidement pour valider les dates et le tarif.
             </p>
          </div>
@@ -149,7 +149,7 @@ export default function StepSummary() {
         <button
           onClick={() => setStep(3)}
           disabled={isSubmitting}
-          className="flex flex-1 items-center justify-center rounded-full border border-gray-200 py-3.5 text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+          className="flex flex-1 items-center justify-center rounded-full border border-slate-200 py-3.5 text-sm font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Retour
@@ -157,7 +157,7 @@ export default function StepSummary() {
         <button
           onClick={handleConfirm}
           disabled={isSubmitting}
-          className="flex flex-[2] items-center justify-center rounded-full bg-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:bg-cyan-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-400"
+          className="flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-400"
         >
           {isSubmitting ? (
             <>

@@ -81,8 +81,8 @@ export default function StepSchedule() {
     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
       
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Vos disponibilités</h2>
-        <p className="text-gray-500">Sélectionnez vos dates et horaires précis.</p>
+        <h2 className="text-2xl font-bold text-slate-900">Vos disponibilités</h2>
+        <p className="text-slate-500">Sélectionnez vos dates et horaires précis.</p>
       </div>
 
       {/* --- Frequency --- */}
@@ -100,8 +100,8 @@ export default function StepSchedule() {
               className={`
                 flex items-center justify-center rounded-xl border p-4 transition-all
                 ${isSelected 
-                  ? "border-cyan-500 bg-cyan-50 text-cyan-700 ring-2 ring-cyan-500" 
-                  : "border-gray-200 bg-white text-gray-600 hover:border-cyan-200"
+                  ? "border-teal-600 bg-teal-50 text-teal-800 ring-2 ring-teal-600" 
+                  : "border-slate-200 bg-white text-slate-600 hover:border-teal-200"
                 }
               `}
             >
@@ -111,16 +111,16 @@ export default function StepSchedule() {
         })}
       </div>
 
-      <div className="h-px bg-gray-100" />
+      <div className="h-px bg-slate-100" />
 
       {/* --- Date Selection (Range) --- */}
       <div className="space-y-3">
-        <label className="flex items-center justify-between text-sm font-medium text-gray-700">
+        <label className="flex items-center justify-between text-sm font-medium text-slate-700">
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-cyan-600" />
+            <Calendar className="h-4 w-4 text-teal-600" />
             Sélectionnez les dates
           </div>
-          <span className="text-xs text-cyan-600 bg-cyan-50 px-2 py-1 rounded-full">
+          <span className="text-xs text-teal-700 bg-teal-50 px-2 py-1 rounded-full">
             {schedule.endDate ? "Période définie" : (schedule.startDate ? "Sélectionnez la fin" : "Sélectionnez une date")}
           </span>
         </label>
@@ -129,11 +129,11 @@ export default function StepSchedule() {
           {dates.map((date) => {
             const status = getDateStatus(date);
             
-            let className = "border-gray-200 bg-white text-gray-600 hover:border-cyan-300 hover:bg-cyan-50"; 
+            let className = "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50"; 
             if (status === "selected") {
-              className = "border-cyan-500 bg-cyan-600 text-white shadow-md ring-2 ring-cyan-200";
+              className = "border-teal-600 bg-teal-600 text-white shadow-md ring-2 ring-teal-200";
             } else if (status === "in-range") {
-              className = "border-cyan-200 bg-cyan-100 text-cyan-800";
+              className = "border-teal-200 bg-teal-50 text-teal-800";
             }
 
             return (
@@ -159,20 +159,20 @@ export default function StepSchedule() {
 
       {/* --- Time Selection (Precise Hours) --- */}
       <div className="space-y-3">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Clock className="h-4 w-4 text-cyan-600" />
+        <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <Clock className="h-4 w-4 text-teal-600" />
           Créneau horaire
         </label>
         
         <div className="flex items-center gap-4">
             {/* Start Time */}
             <div className="flex-1 space-y-1">
-                <span className="text-xs text-gray-500 font-bold uppercase">De</span>
+                <span className="text-xs text-slate-500 font-bold uppercase">De</span>
                 <div className="relative">
                     <select
                         value={schedule.startTime}
                         onChange={(e) => setSchedule({ ...schedule, startTime: e.target.value })}
-                        className="w-full appearance-none rounded-xl border border-gray-200 bg-white py-3 pl-4 pr-10 font-bold text-gray-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                        className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 font-bold text-slate-900 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
                     >
                         {hours.map((h) => (
                             <option key={`start-${h}`} value={h}>{h}</option>
@@ -181,18 +181,18 @@ export default function StepSchedule() {
                 </div>
             </div>
 
-            <div className="pt-5 text-gray-400">
+            <div className="pt-5 text-slate-400">
                 <ArrowRight className="h-5 w-5" />
             </div>
 
             {/* End Time */}
             <div className="flex-1 space-y-1">
-                <span className="text-xs text-gray-500 font-bold uppercase">À</span>
+                <span className="text-xs text-slate-500 font-bold uppercase">À</span>
                 <div className="relative">
                     <select
                         value={schedule.endTime}
                         onChange={(e) => setSchedule({ ...schedule, endTime: e.target.value })}
-                        className="w-full appearance-none rounded-xl border border-gray-200 bg-white py-3 pl-4 pr-10 font-bold text-gray-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                        className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 font-bold text-slate-900 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
                     >
                         {hours.map((h) => (
                             <option key={`end-${h}`} value={h}>{h}</option>
@@ -201,7 +201,7 @@ export default function StepSchedule() {
                 </div>
             </div>
         </div>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-slate-400">
            Durée estimée : {Math.max(0, parseInt(schedule.endTime) - parseInt(schedule.startTime))} heures
         </p>
       </div>
@@ -210,14 +210,14 @@ export default function StepSchedule() {
       <div className="flex gap-4 pt-6">
         <button
           onClick={() => setStep(2)}
-          className="flex flex-1 items-center justify-center rounded-full border border-gray-200 py-3.5 text-sm font-bold text-gray-600 hover:bg-gray-50"
+          className="flex flex-1 items-center justify-center rounded-full border border-slate-200 py-3.5 text-sm font-bold text-slate-600 hover:bg-slate-50"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Retour
         </button>
         <button
           onClick={handleNext}
-          className="group flex flex-[2] items-center justify-center rounded-full bg-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:bg-cyan-700 hover:shadow-xl"
+          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl"
         >
           Vérifier la demande
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
