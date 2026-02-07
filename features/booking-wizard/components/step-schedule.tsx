@@ -79,7 +79,11 @@ export default function StepSchedule() {
         </label>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
           {dates.map((date) => {
-            const isSelected = schedule.date?.toDateString() === date.toDateString();
+            // Compare dates without time to ensure matching works
+            const isSelected = schedule.date 
+              ? new Date(schedule.date).toDateString() === date.toDateString()
+              : false;
+
             return (
               <button
                 key={date.toISOString()}
@@ -93,7 +97,7 @@ export default function StepSchedule() {
                 `}
               >
                 <span className="text-xs font-medium opacity-80 capitalize">
-                  {/* Changed to French Locale */}
+                  {/* French Locale for Days (lun., mar., etc.) */}
                   {date.toLocaleDateString("fr-FR", { weekday: "short" })}
                 </span>
                 <span className="text-lg font-bold">
