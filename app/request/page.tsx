@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useWizardStore } from "@/features/booking-wizard/store/use-wizard-store";
+import { useWizardStore } from "../../features/booking-wizard/store/use-wizard-store";
 import { Check } from "lucide-react";
 
 // Import Step Components
-// (These need to be populated next, or the build might fail if they are empty files)
-import StepContact from "@/features/booking-wizard/components/step-contact";
-import StepProperty from "@/features/booking-wizard/components/step-property";
-import StepSchedule from "@/features/booking-wizard/components/step-schedule";
-import StepSummary from "@/features/booking-wizard/components/step-summary";
+// Note: Adjusted imports to relative paths to ensure they work with your folder structure
+import StepContact from "../../features/booking-wizard/components/step-contact";
+import StepProperty from "../../features/booking-wizard/components/step-property";
+import StepSchedule from "../../features/booking-wizard/components/step-schedule";
+import StepSummary from "../../features/booking-wizard/components/step-summary";
 
 export default function BookingWizardPage() {
   // Use Zustand store
@@ -27,11 +27,12 @@ export default function BookingWizardPage() {
   const totalSteps = 4;
   const progress = (step / totalSteps) * 100;
 
+  // French Labels
   const stepsLabels = [
     "Contact",
-    "Property",
-    "Schedule",
-    "Confirm"
+    "Logement",
+    "Planning",
+    "Validation"
   ];
 
   // Helper to render the current step
@@ -56,8 +57,8 @@ export default function BookingWizardPage() {
       {/* --- PROGRESS BAR --- */}
       <div className="space-y-4">
         <div className="flex justify-between text-sm font-medium text-gray-500">
-          <span>Step {step} of {totalSteps}</span>
-          <span className="text-cyan-600">{Math.round(progress)}% Completed</span>
+          <span>Étape {step} sur {totalSteps}</span>
+          <span className="text-cyan-600">{Math.round(progress)}% complété</span>
         </div>
         
         {/* The Track */}

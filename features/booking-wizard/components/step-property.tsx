@@ -12,7 +12,7 @@ export default function StepProperty() {
 
   const handleNext = () => {
     if (!address) {
-      alert("Please enter your address or city.");
+      alert("Veuillez entrer votre adresse ou ville.");
       return;
     }
     setProperty({ ...property, address }); // Ensure address is saved
@@ -22,8 +22,8 @@ export default function StepProperty() {
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-500">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Tell us about your home</h2>
-        <p className="text-gray-500">This helps us assign the right number of cleaners.</p>
+        <h2 className="text-2xl font-bold text-gray-900">Parlez-nous de votre logement</h2>
+        <p className="text-gray-500">Cela nous aide à estimer la durée du ménage.</p>
       </div>
 
       <div className="space-y-8">
@@ -31,7 +31,7 @@ export default function StepProperty() {
         {/* --- Property Type Selection --- */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { id: "apartment", label: "Apartment", icon: Building2 },
+            { id: "apartment", label: "Appartement", icon: Building2 },
             { id: "villa", label: "Villa", icon: Home },
             { id: "studio", label: "Studio", icon: LayoutGrid },
           ].map((type) => {
@@ -62,8 +62,8 @@ export default function StepProperty() {
           {/* Bedrooms */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-bold text-gray-900">Bedrooms</p>
-              <p className="text-xs text-gray-500">Living rooms included</p>
+              <p className="font-bold text-gray-900">Chambres / Pièces</p>
+              <p className="text-xs text-gray-500">Salon inclus</p>
             </div>
             <div className="flex items-center gap-4">
               <button 
@@ -87,8 +87,8 @@ export default function StepProperty() {
           {/* Bathrooms */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-bold text-gray-900">Bathrooms</p>
-              <p className="text-xs text-gray-500">Kitchen included</p>
+              <p className="font-bold text-gray-900">Salles de bain</p>
+              <p className="text-xs text-gray-500">Cuisine incluse</p>
             </div>
             <div className="flex items-center gap-4">
               <button 
@@ -110,7 +110,7 @@ export default function StepProperty() {
 
         {/* --- Location Input --- */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Where do you live?</label>
+          <label className="text-sm font-medium text-gray-700">Où habitez-vous ?</label>
           <div className="relative">
             <MapPin className="absolute left-3 top-3 h-5 w-5 text-cyan-600" />
             <input
@@ -120,10 +120,10 @@ export default function StepProperty() {
                 setProperty({ ...property, address: e.target.value });
               }}
               className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-gray-900 outline-none transition-all focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
-              placeholder="City, Neighborhood, or Street Address"
+              placeholder="Ville, Quartier ou Adresse précise"
             />
           </div>
-          <p className="text-xs text-gray-400">We currently serve your area.</p>
+          <p className="text-xs text-gray-400">Nous couvrons actuellement votre zone.</p>
         </div>
 
         {/* --- Navigation Buttons --- */}
@@ -133,13 +133,13 @@ export default function StepProperty() {
             className="flex flex-1 items-center justify-center rounded-full border border-gray-200 py-3.5 text-sm font-bold text-gray-600 hover:bg-gray-50"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            Retour
           </button>
           <button
             onClick={handleNext}
             className="group flex flex-[2] items-center justify-center rounded-full bg-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:bg-cyan-700 hover:shadow-xl"
           >
-            Continue to Schedule
+            Continuer vers le Planning
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </button>
         </div>

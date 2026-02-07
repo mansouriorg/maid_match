@@ -11,37 +11,37 @@ export default function SuccessPage() {
       </div>
 
       <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
-        Request Received!
+        Demande Reçue !
       </h1>
       
       <p className="mb-8 max-w-md text-lg text-gray-600">
-        We have received your details. <br />
-        <span className="font-semibold text-gray-900">Please keep your phone close.</span>
+        Nous avons bien reçu vos informations. <br />
+        <span className="font-semibold text-gray-900">Gardez votre téléphone à proximité.</span>
       </p>
 
       {/* What Happens Next Section */}
-      <div className="mb-10 w-full max-w-sm rounded-2xl border border-blue-100 bg-blue-50/50 p-6 text-left shadow-sm">
-        <h3 className="mb-4 font-bold text-blue-900 flex items-center gap-2">
+      <div className="mb-10 w-full max-w-sm rounded-2xl border border-cyan-100 bg-cyan-50/50 p-6 text-left shadow-sm">
+        <h3 className="mb-4 font-bold text-cyan-900 flex items-center gap-2">
           <PhoneIncoming className="h-5 w-5" />
-          What happens now?
+          Et maintenant ?
         </h3>
         <ul className="space-y-4">
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">1</div>
-                <p className="text-sm text-blue-800">
-                  Our team is reviewing your home details right now.
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cyan-200 text-xs font-bold text-cyan-800">1</div>
+                <p className="text-sm text-cyan-800">
+                  Notre équipe analyse vos besoins en ce moment même.
                 </p>
             </li>
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">2</div>
-                <p className="text-sm text-blue-800">
-                  We will call you within <strong>30 minutes</strong> to provide a custom quote.
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cyan-200 text-xs font-bold text-cyan-800">2</div>
+                <p className="text-sm text-cyan-800">
+                  Nous vous appellerons sous <strong>30 minutes</strong> pour un devis personnalisé.
                 </p>
             </li>
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">3</div>
-                <p className="text-sm text-blue-800">
-                  Once agreed, we dispatch the maid to your location.
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-cyan-200 text-xs font-bold text-cyan-800">3</div>
+                <p className="text-sm text-cyan-800">
+                  Une fois validé, nous envoyons l'intervenant(e) chez vous.
                 </p>
             </li>
         </ul>
@@ -53,7 +53,7 @@ export default function SuccessPage() {
             className="flex w-full items-center justify-center gap-2 rounded-full bg-gray-900 py-3.5 text-sm font-bold text-white transition-all hover:bg-gray-800 hover:scale-105"
         >
             <Home className="h-4 w-4" />
-            Return to Home
+            Retour à l'accueil
         </Link>
       </div>
     </div>

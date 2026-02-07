@@ -24,16 +24,16 @@ export default function LandingPage() {
             MaidMatch
           </div>
           <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-            <Link href="#how-it-works" className="transition-colors hover:text-cyan-600">How it Works</Link>
+            <Link href="#how-it-works" className="transition-colors hover:text-cyan-600">Comment ça marche</Link>
             <Link href="#services" className="transition-colors hover:text-cyan-600">Services</Link>
-            <Link href="#reviews" className="transition-colors hover:text-cyan-600">Reviews</Link>
+            <Link href="#reviews" className="transition-colors hover:text-cyan-600">Avis</Link>
           </nav>
           <div className="flex items-center gap-4">
             <Link 
               href="/request" 
               className="rounded-full bg-cyan-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:scale-105 hover:bg-cyan-700 hover:shadow-xl"
             >
-              Book a Maid
+              Réserver
             </Link>
           </div>
         </div>
@@ -51,18 +51,18 @@ export default function LandingPage() {
             <div className="mx-auto max-w-4xl space-y-8">
               <div className="inline-flex items-center rounded-full border border-cyan-100 bg-white px-3 py-1 text-sm font-medium text-cyan-600 shadow-sm">
                 <Star className="mr-2 h-4 w-4 fill-cyan-400 text-cyan-400" />
-                #1 Rated Cleaning Service in Your Area
+                #1 Service de ménage dans votre région
               </div>
               
               <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-7xl">
-                Experience the Joy of a <br />
+                Découvrez la joie d'une <br />
                 <span className="bg-gradient-to-r from-cyan-500 to-teal-500 bg-clip-text text-transparent">
-                  Spotless Home
+                  Maison Impeccable
                 </span>
               </h1>
               
               <p className="mx-auto max-w-2xl text-xl text-gray-600 leading-relaxed">
-                Life is too short to clean. Let our vetted professionals handle the dust and grime while you focus on what matters. 
+                La vie est trop courte pour faire le ménage. Laissez nos professionnels vérifiés s'occuper de la poussière pendant que vous profitez de l'essentiel.
               </p>
               
               <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
@@ -70,14 +70,14 @@ export default function LandingPage() {
                   href="/request"
                   className="group flex h-16 w-full items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 px-10 text-lg font-bold text-white shadow-xl shadow-cyan-200 transition-all hover:scale-105 hover:shadow-2xl sm:w-auto"
                 >
-                  Book Now - Get $10 Off
+                  Demander un Devis
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="#how-it-works"
                   className="flex h-16 w-full items-center justify-center rounded-full border-2 border-gray-100 bg-white px-10 text-lg font-bold text-gray-600 transition-colors hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700 sm:w-auto"
                 >
-                  See How It Works
+                  Comment ça marche ?
                 </Link>
               </div>
 
@@ -87,19 +87,19 @@ export default function LandingPage() {
                   <div className="rounded-full bg-green-100 p-1">
                     <CheckCircle2 className="h-5 w-5 text-green-600" />
                   </div>
-                  <span>Background Checked Staff</span>
+                  <span>Personnel Vérifié</span>
                 </div>
                 <div className="flex items-center justify-center gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
                   <div className="rounded-full bg-green-100 p-1">
                     <CheckCircle2 className="h-5 w-5 text-green-600" />
                   </div>
-                  <span>100% Satisfaction Guarantee</span>
+                  <span>Satisfaction Garantie 100%</span>
                 </div>
                 <div className="flex items-center justify-center gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
                   <div className="rounded-full bg-green-100 p-1">
                     <CheckCircle2 className="h-5 w-5 text-green-600" />
                   </div>
-                  <span>Cashless Secure Payment</span>
+                  <span>Paiement Sécurisé</span>
                 </div>
               </div>
             </div>
@@ -110,8 +110,8 @@ export default function LandingPage() {
         <section id="how-it-works" className="bg-white py-24">
           <div className="container mx-auto px-4">
             <div className="mb-20 text-center">
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Clean Home in 3 Steps</h2>
-              <p className="mt-4 text-lg text-gray-600">No phone calls, no hassle. Just a clean home.</p>
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Une maison propre en 3 étapes</h2>
+              <p className="mt-4 text-lg text-gray-600">Pas d'appels inutiles, pas de tracas. Juste une maison propre.</p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
@@ -120,9 +120,9 @@ export default function LandingPage() {
                 <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 transition-colors group-hover:bg-cyan-600 group-hover:text-white">
                   <Clock className="h-10 w-10" />
                 </div>
-                <h3 className="mb-3 text-xl font-bold text-gray-900">1. Customize</h3>
+                <h3 className="mb-3 text-xl font-bold text-gray-900">1. Personnalisez</h3>
                 <p className="text-gray-600">
-                  Tell us about your home and choose a date and time that works for you.
+                  Décrivez votre logement et choisissez la date et l'heure qui vous conviennent.
                 </p>
               </div>
 
@@ -131,9 +131,9 @@ export default function LandingPage() {
                 <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 transition-colors group-hover:bg-cyan-600 group-hover:text-white">
                   <ShieldCheck className="h-10 w-10" />
                 </div>
-                <h3 className="mb-3 text-xl font-bold text-gray-900">2. We Match</h3>
+                <h3 className="mb-3 text-xl font-bold text-gray-900">2. Nous Trouvons</h3>
                 <p className="text-gray-600">
-                  Our algorithm matches you with the highest-rated cleaner in your neighborhood.
+                  Notre algorithme vous attribue l'aide-ménagère la mieux notée de votre quartier.
                 </p>
               </div>
 
@@ -142,9 +142,9 @@ export default function LandingPage() {
                 <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 transition-colors group-hover:bg-cyan-600 group-hover:text-white">
                   <Smile className="h-10 w-10" />
                 </div>
-                <h3 className="mb-3 text-xl font-bold text-gray-900">3. Relax</h3>
+                <h3 className="mb-3 text-xl font-bold text-gray-900">3. Profitez</h3>
                 <p className="text-gray-600">
-                  Your cleaner arrives fully equipped. You come home to a sparkling fresh house.
+                  Votre intervenant(e) arrive équipé(e). Rentrez dans une maison étincelante.
                 </p>
               </div>
             </div>
@@ -156,15 +156,15 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
              <div className="grid gap-16 md:grid-cols-2 items-center">
                 <div>
-                   <h2 className="text-3xl font-bold sm:text-4xl mb-6">Why we are different</h2>
+                   <h2 className="text-3xl font-bold sm:text-4xl mb-6">Pourquoi nous choisir ?</h2>
                    <div className="space-y-6">
                       <div className="flex gap-4">
                         <div className="flex-shrink-0 mt-1">
                           <CheckCircle2 className="h-6 w-6 text-teal-400" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-xl">Hotel-Standard Cleaning</h4>
-                          <p className="text-cyan-100">We train our staff using 5-star hotel housekeeping manuals.</p>
+                          <h4 className="font-bold text-xl">Standard Hôtelier</h4>
+                          <p className="text-cyan-100">Nous formons notre personnel avec des manuels d'entretien 5 étoiles.</p>
                         </div>
                       </div>
                       <div className="flex gap-4">
@@ -172,8 +172,8 @@ export default function LandingPage() {
                           <CheckCircle2 className="h-6 w-6 text-teal-400" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-xl">Eco-Friendly Products</h4>
-                          <p className="text-cyan-100">Safe for your kids and pets. We use non-toxic, biodegradable supplies.</p>
+                          <h4 className="font-bold text-xl">Produits Écologiques</h4>
+                          <p className="text-cyan-100">Sans danger pour enfants et animaux. Nous utilisons des produits non toxiques.</p>
                         </div>
                       </div>
                       <div className="flex gap-4">
@@ -181,8 +181,8 @@ export default function LandingPage() {
                           <CheckCircle2 className="h-6 w-6 text-teal-400" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-xl">Same Day Availability</h4>
-                          <p className="text-cyan-100">Need a last-minute clean? We have standby teams ready.</p>
+                          <h4 className="font-bold text-xl">Disponibilité Immédiate</h4>
+                          <p className="text-cyan-100">Besoin d'un ménage urgent ? Nos équipes sont prêtes à intervenir.</p>
                         </div>
                       </div>
                    </div>
@@ -194,10 +194,10 @@ export default function LandingPage() {
                    </div>
                    <div className="relative z-10 text-center h-full flex flex-col justify-center">
                       <p className="text-5xl font-bold text-white mb-2">15,000+</p>
-                      <p className="text-xl text-cyan-200">Houses Cleaned</p>
+                      <p className="text-xl text-cyan-200">Logements Nettoyés</p>
                       <div className="my-8 h-px bg-cyan-700 w-full" />
                       <p className="text-5xl font-bold text-white mb-2">4.9/5</p>
-                      <p className="text-xl text-cyan-200">Average Rating</p>
+                      <p className="text-xl text-cyan-200">Note Moyenne</p>
                    </div>
                 </div>
              </div>
@@ -215,16 +215,16 @@ export default function LandingPage() {
             MaidMatch
           </div>
           <p className="mb-8 text-gray-500 max-w-sm mx-auto">
-            Making homes happier, one clean at a time. Book your trusted cleaning professional today.
+            Rendre les foyers plus heureux, un ménage à la fois. Réservez votre professionnel de confiance aujourd'hui.
           </p>
           <div className="flex justify-center gap-8 text-sm font-medium text-gray-600">
-            <Link href="/privacy" className="hover:text-cyan-600">Privacy Policy</Link>
-            <Link href="#" className="hover:text-cyan-600">Terms of Service</Link>
-            <Link href="#" className="hover:text-cyan-600">Support</Link>
-            <Link href="#" className="hover:text-cyan-600">Become a Cleaner</Link>
+            <Link href="/privacy" className="hover:text-cyan-600">Confidentialité</Link>
+            <Link href="#" className="hover:text-cyan-600">Conditions</Link>
+            <Link href="#" className="hover:text-cyan-600">Aide</Link>
+            <Link href="#" className="hover:text-cyan-600">Devenir Intervenant</Link>
           </div>
           <p className="mt-12 text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} MaidMatch Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} MaidMatch Inc. Tous droits réservés.
           </p>
         </div>
       </footer>

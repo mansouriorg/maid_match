@@ -20,16 +20,16 @@ export default function StepSchedule() {
 
   const dates = generateDates();
   
-  // Broader time slots are better for manual scheduling
+  // Broader time slots translated to French
   const timeSlots = [
-    "Morning (8am - 12pm)", 
-    "Afternoon (12pm - 4pm)", 
-    "Evening (4pm - 8pm)"
+    "Matin (08h - 12h)", 
+    "Après-midi (12h - 16h)", 
+    "Soir (16h - 20h)"
   ];
 
   const handleNext = () => {
     if (!schedule.date) {
-      alert("Please select a date.");
+      alert("Veuillez sélectionner une date.");
       return;
     }
     setStep(4);
@@ -39,16 +39,16 @@ export default function StepSchedule() {
     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
       
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">When should we come?</h2>
-        <p className="text-gray-500">Select a date and your preferred time of day.</p>
+        <h2 className="text-2xl font-bold text-gray-900">Quand devons-nous passer ?</h2>
+        <p className="text-gray-500">Choisissez une date et votre créneau horaire préféré.</p>
       </div>
 
       {/* --- Frequency Selection (Clean Version - No Discount Badges) --- */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
-          { id: "one-time", label: "One-time" },
-          { id: "weekly", label: "Weekly" },
-          { id: "bi-weekly", label: "Bi-weekly" },
+          { id: "one-time", label: "Une seule fois" },
+          { id: "weekly", label: "Hebdomadaire" },
+          { id: "bi-weekly", label: "Bi-mensuel" },
         ].map((option) => {
           const isSelected = schedule.frequency === option.id;
           return (
@@ -75,7 +75,7 @@ export default function StepSchedule() {
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Calendar className="h-4 w-4 text-cyan-600" />
-          Select Date
+          Choisir une date
         </label>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
           {dates.map((date) => {
@@ -92,8 +92,9 @@ export default function StepSchedule() {
                   }
                 `}
               >
-                <span className="text-xs font-medium opacity-80">
-                  {date.toLocaleDateString("en-US", { weekday: "short" })}
+                <span className="text-xs font-medium opacity-80 capitalize">
+                  {/* Changed to French Locale */}
+                  {date.toLocaleDateString("fr-FR", { weekday: "short" })}
                 </span>
                 <span className="text-lg font-bold">
                   {date.getDate()}
@@ -108,7 +109,7 @@ export default function StepSchedule() {
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Clock className="h-4 w-4 text-cyan-600" />
-          Preferred Time
+          Heure préférée
         </label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {timeSlots.map((time) => {
@@ -139,13 +140,13 @@ export default function StepSchedule() {
           className="flex flex-1 items-center justify-center rounded-full border border-gray-200 py-3.5 text-sm font-bold text-gray-600 hover:bg-gray-50"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+          Retour
         </button>
         <button
           onClick={handleNext}
           className="group flex flex-[2] items-center justify-center rounded-full bg-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:bg-cyan-700 hover:shadow-xl"
         >
-          Review Request
+          Vérifier la demande
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
