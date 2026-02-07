@@ -1,39 +1,48 @@
 import Link from "next/link";
-import { Check, ArrowRight, MessageCircle } from "lucide-react";
+import { Check, PhoneIncoming, Home } from "lucide-react";
 
 export default function SuccessPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 text-center animate-in fade-in duration-700">
       
       {/* Success Animation Circle */}
-      <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-green-100 ring-8 ring-green-50 animate-in zoom-in duration-500">
+      <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-green-100 ring-8 ring-green-50">
         <Check className="h-12 w-12 text-green-600" />
       </div>
 
-      <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900">
-        Booking Confirmed!
+      <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
+        Request Received!
       </h1>
       
       <p className="mb-8 max-w-md text-lg text-gray-600">
-        Thank you. We have received your request. <br />
-        Our team is reviewing your details and will contact you shortly via <strong>WhatsApp</strong> to confirm the maid.
+        We have received your details. <br />
+        <span className="font-semibold text-gray-900">Please keep your phone close.</span>
       </p>
 
       {/* What Happens Next Section */}
-      <div className="mb-10 w-full max-w-sm rounded-2xl border border-gray-100 bg-gray-50 p-6 text-left shadow-sm">
-        <h3 className="mb-4 font-bold text-gray-900">What happens next?</h3>
+      <div className="mb-10 w-full max-w-sm rounded-2xl border border-blue-100 bg-blue-50/50 p-6 text-left shadow-sm">
+        <h3 className="mb-4 font-bold text-blue-900 flex items-center gap-2">
+          <PhoneIncoming className="h-5 w-5" />
+          What happens now?
+        </h3>
         <ul className="space-y-4">
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-100 text-xs font-bold text-cyan-700">1</div>
-                <p className="text-sm text-gray-600">We assign the best rated maid in your area.</p>
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">1</div>
+                <p className="text-sm text-blue-800">
+                  Our team is reviewing your home details right now.
+                </p>
             </li>
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-100 text-xs font-bold text-cyan-700">2</div>
-                <p className="text-sm text-gray-600">You receive a confirmation message with her profile.</p>
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">2</div>
+                <p className="text-sm text-blue-800">
+                  We will call you within <strong>30 minutes</strong> to provide a custom quote.
+                </p>
             </li>
             <li className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-100 text-xs font-bold text-cyan-700">3</div>
-                <p className="text-sm text-gray-600">She arrives at your doorstep on time!</p>
+                <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold text-blue-800">3</div>
+                <p className="text-sm text-blue-800">
+                  Once agreed, we dispatch the maid to your location.
+                </p>
             </li>
         </ul>
       </div>
@@ -41,18 +50,11 @@ export default function SuccessPage() {
       <div className="flex flex-col gap-3 w-full max-w-xs">
         <Link
             href="/"
-            className="flex w-full items-center justify-center rounded-full bg-gray-900 py-3.5 text-sm font-bold text-white transition-all hover:bg-gray-800"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-gray-900 py-3.5 text-sm font-bold text-white transition-all hover:bg-gray-800 hover:scale-105"
         >
+            <Home className="h-4 w-4" />
             Return to Home
         </Link>
-        <a 
-            href="https://wa.me/" 
-            target="_blank"
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 py-3.5 text-sm font-bold text-gray-600 transition-all hover:bg-gray-50"
-        >
-            <MessageCircle className="h-4 w-4" />
-            Contact Support
-        </a>
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 "use client";
 
 import { useWizardStore } from "../store/use-wizard-store";
-import { ArrowLeft, ArrowRight, Calendar, Clock, Repeat } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
 
 export default function StepSchedule() {
   const { schedule, setSchedule, setStep } = useWizardStore();
 
-  // Generate next 7 days for the date picker
+  // Generate next 5 days for the calendar
   const generateDates = () => {
     const dates = [];
     const today = new Date();
@@ -19,7 +19,13 @@ export default function StepSchedule() {
   };
 
   const dates = generateDates();
-  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
+  
+  // Broader time slots are better for manual scheduling
+  const timeSlots = [
+    "Morning (8am - 12pm)", 
+    "Afternoon (12pm - 4pm)", 
+    "Evening (4pm - 8pm)"
+  ];
 
   const handleNext = () => {
     if (!schedule.date) {
@@ -32,18 +38,17 @@ export default function StepSchedule() {
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
       
-      {/* --- Header --- */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900">When should we come?</h2>
-        <p className="text-gray-500">Choose a time that works best for you.</p>
+        <p className="text-gray-500">Select a date and your preferred time of day.</p>
       </div>
 
-      {/* --- Frequency Selection (Upsell) --- */}
+      {/* --- Frequency Selection (Clean Version - No Discount Badges) --- */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
-          { id: "one-time", label: "One-time", discount: "" },
-          { id: "weekly", label: "Weekly", discount: "Save 20%" },
-          { id: "bi-weekly", label: "Bi-weekly", discount: "Save 15%" },
+          { id: "one-time", label: "One-time" },
+          { id: "weekly", label: "Weekly" },
+          { id: "bi-weekly", label: "Bi-weekly" },
         ].map((option) => {
           const isSelected = schedule.frequency === option.id;
           return (
@@ -51,18 +56,13 @@ export default function StepSchedule() {
               key={option.id}
               onClick={() => setSchedule({ ...schedule, frequency: option.id as any })}
               className={`
-                relative flex flex-col items-center justify-center rounded-xl border p-4 transition-all
+                flex items-center justify-center rounded-xl border p-4 transition-all
                 ${isSelected 
-                  ? "border-cyan-500 bg-cyan-50 text-cyan-700 ring-2 ring-cyan-500 ring-offset-1" 
+                  ? "border-cyan-500 bg-cyan-50 text-cyan-700 ring-2 ring-cyan-500" 
                   : "border-gray-200 bg-white text-gray-600 hover:border-cyan-200"
                 }
               `}
             >
-              {option.discount && (
-                <span className="absolute -top-3 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">
-                  {option.discount}
-                </span>
-              )}
               <span className="font-bold">{option.label}</span>
             </button>
           );
@@ -108,9 +108,9 @@ export default function StepSchedule() {
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Clock className="h-4 w-4 text-cyan-600" />
-          Select Start Time
+          Preferred Time
         </label>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {timeSlots.map((time) => {
             const isSelected = schedule.timeSlot === time;
             return (
@@ -118,7 +118,7 @@ export default function StepSchedule() {
                 key={time}
                 onClick={() => setSchedule({ ...schedule, timeSlot: time })}
                 className={`
-                  rounded-lg border py-2 text-sm font-medium transition-all
+                  rounded-lg border py-3 text-sm font-medium transition-all
                   ${isSelected
                     ? "border-cyan-500 bg-cyan-100 text-cyan-900 ring-1 ring-cyan-500"
                     : "border-gray-200 bg-white text-gray-600 hover:border-cyan-300"
@@ -145,7 +145,7 @@ export default function StepSchedule() {
           onClick={handleNext}
           className="group flex flex-[2] items-center justify-center rounded-full bg-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:bg-cyan-700 hover:shadow-xl"
         >
-          Review Booking
+          Review Request
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
       </div>

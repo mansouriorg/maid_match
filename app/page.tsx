@@ -29,9 +29,6 @@ export default function LandingPage() {
             <Link href="#reviews" className="transition-colors hover:text-cyan-600">Reviews</Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Link href="/login" className="hidden text-sm font-medium text-gray-500 hover:text-cyan-600 md:block">
-              Log in
-            </Link>
             <Link 
               href="/request" 
               className="rounded-full bg-cyan-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:scale-105 hover:bg-cyan-700 hover:shadow-xl"
@@ -155,7 +152,7 @@ export default function LandingPage() {
         </section>
 
         {/* --- WHY CHOOSE US --- */}
-        <section className="bg-cyan-900 py-24 text-white">
+        <section id="services" className="bg-cyan-900 py-24 text-white">
           <div className="container mx-auto px-4">
              <div className="grid gap-16 md:grid-cols-2 items-center">
                 <div>
