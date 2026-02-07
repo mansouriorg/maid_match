@@ -34,16 +34,22 @@ export default function StepSummary() {
     keys: "Clés au gardien",
   };
 
+  // --- LOGIC FOR DATE DISPLAY ---
+  const renderDate = () => {
+    if (!schedule.startDate) return "Date non sélectionnée";
+    const start = new Date(schedule.startDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' });
+    
+    if (schedule.endDate) {
+        const end = new Date(schedule.endDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' });
+        return `Du ${start} au ${end}`;
+    }
+    return new Date(schedule.startDate).toLocaleDateString("fr-FR", { weekday: 'long', day: 'numeric', month: 'long' });
+  };
+
   const handleConfirm = async () => {
     setIsSubmitting(true);
-    
-    // Simulate API Call
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    // Log the full data payload to verify everything is captured
     console.log("Booking Request Sent!", { contact, property, schedule });
-    
-    // Clear store and redirect
     reset();
     router.push("/success");
   };
@@ -56,10 +62,8 @@ export default function StepSummary() {
         <p className="text-gray-500">Vérifiez les détails avant l'envoi. Nous vous appellerons pour le devis.</p>
       </div>
 
-      {/* --- Card 1: Service Details --- */}
       <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5 space-y-5">
         
-        {/* Header: Type of Clean & Property */}
         <div className="flex justify-between items-start">
             <div>
                 <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
@@ -77,9 +81,7 @@ export default function StepSummary() {
         
         <div className="h-px bg-gray-200" />
 
-        {/* Options & Supplies Grid */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {/* Supplies Status */}
             <div className={`rounded-lg p-3 text-sm font-medium border ${!property.hasSupplies ? 'bg-orange-50 border-orange-100 text-orange-800' : 'bg-green-50 border-green-100 text-green-800'}`}>
                 {property.hasSupplies ? (
                     <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4"/> Matériel fourni par le client</span>
@@ -88,7 +90,6 @@ export default function StepSummary() {
                 )}
             </div>
 
-            {/* Extras List */}
             {property.extras && property.extras.length > 0 && (
                  <div className="rounded-lg bg-white border border-gray-200 p-3 text-sm text-gray-700 flex flex-wrap gap-2 items-center">
                     <span className="font-bold text-xs text-gray-400 uppercase mr-1">Options:</span>
@@ -103,18 +104,22 @@ export default function StepSummary() {
         
         <div className="h-px bg-gray-200" />
         
-        {/* Logistics (Date, Address, Contact) */}
         <div className="space-y-3 text-sm">
-            <div className="flex items-center gap-3 text-gray-700">
-                <Calendar className="h-4 w-4 text-cyan-600 flex-shrink-0" />
-                <span className="capitalize">
-                  {schedule.date 
-                    ? schedule.date.toLocaleDateString("fr-FR", { weekday: 'long', day: 'numeric', month: 'long' })
-                    : "Date non sélectionnée"
-                  } 
-                  {schedule.timeSlot && ` — ${schedule.timeSlot}`}
-                </span>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
+                <div className="flex items-center gap-3 text-gray-700">
+                    <Calendar className="h-4 w-4 text-cyan-600 flex-shrink-0" />
+                    <span className="capitalize font-semibold">
+                      {renderDate()}
+                    </span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                    <span className="text-gray-300 hidden sm:inline">|</span>
+                    <span className="font-medium text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded">
+                        {schedule.startTime} - {schedule.endTime}
+                    </span>
+                </div>
             </div>
+            
             <div className="flex items-center gap-3 text-gray-700">
                 <MapPin className="h-4 w-4 text-cyan-600 flex-shrink-0" />
                 <span className="truncate max-w-[250px]">
@@ -128,7 +133,6 @@ export default function StepSummary() {
         </div>
       </div>
 
-      {/* --- Card 2: Quote Info --- */}
       <div className="rounded-2xl border border-cyan-100 bg-cyan-50/50 p-5 flex gap-4 items-start">
          <div className="mt-1 flex-shrink-0 rounded-full bg-cyan-100 p-2 text-cyan-600">
             <Phone className="h-5 w-5" />
@@ -136,13 +140,11 @@ export default function StepSummary() {
          <div className="space-y-1">
             <h4 className="font-bold text-cyan-900">Dernière étape : Devis par téléphone</h4>
             <p className="text-sm text-cyan-800 leading-relaxed">
-                Chaque logement étant unique, nous ne calculons pas le prix automatiquement. 
-                Notre équipe vous appellera au <strong>{contact.phone}</strong> très rapidement pour valider les options (clés, matériel, repassage) et vous donner le meilleur tarif.
+                Notre équipe vous appellera au <strong>{contact.phone}</strong> très rapidement pour valider les dates et le tarif.
             </p>
          </div>
       </div>
 
-      {/* --- Action Buttons --- */}
       <div className="flex gap-4 pt-4">
         <button
           onClick={() => setStep(3)}

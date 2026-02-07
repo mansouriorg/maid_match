@@ -6,13 +6,14 @@ import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
 export default function StepSchedule() {
   const { schedule, setSchedule, setStep } = useWizardStore();
 
-  // Generate next 5 days for the calendar
+  // Generate next 14 days
   const generateDates = () => {
     const dates = [];
     const today = new Date();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 14; i++) {
       const date = new Date(today);
-      date.setDate(today.getDate() + i + 1); // Start from tomorrow
+      date.setDate(today.getDate() + i + 1);
+      date.setHours(0, 0, 0, 0); // Reset time for clean comparison
       dates.push(date);
     }
     return dates;
@@ -20,18 +21,59 @@ export default function StepSchedule() {
 
   const dates = generateDates();
   
-  // Broader time slots translated to French
-  const timeSlots = [
-    "Matin (08h - 12h)", 
-    "Après-midi (12h - 16h)", 
-    "Soir (16h - 20h)"
-  ];
+  // Generate hours from 07:00 to 22:00
+  const hours = Array.from({ length: 16 }, (_, i) => {
+    const hour = i + 7; 
+    return `${hour.toString().padStart(2, '0')}:00`;
+  });
 
-  const handleNext = () => {
-    if (!schedule.date) {
-      alert("Veuillez sélectionner une date.");
+  // --- Date Range Logic ---
+  const handleDateClick = (clickedDate: Date) => {
+    const start = schedule.startDate ? new Date(schedule.startDate) : null;
+    const end = schedule.endDate ? new Date(schedule.endDate) : null;
+
+    // Case 1: Nothing selected OR Range already full (Reset)
+    if (!start || (start && end)) {
+      setSchedule({ ...schedule, startDate: clickedDate, endDate: null });
       return;
     }
+
+    // Case 2: Clicked after start -> Set End
+    if (clickedDate > start) {
+      setSchedule({ ...schedule, endDate: clickedDate });
+      return;
+    }
+
+    // Case 3: Clicked before start -> New Start
+    setSchedule({ ...schedule, startDate: clickedDate, endDate: null });
+  };
+
+  const getDateStatus = (date: Date) => {
+    const time = date.getTime();
+    const start = schedule.startDate ? new Date(schedule.startDate).setHours(0,0,0,0) : null;
+    const end = schedule.endDate ? new Date(schedule.endDate).setHours(0,0,0,0) : null;
+
+    if (time === start || time === end) return "selected";
+    if (start && end && time > start && time < end) return "in-range";
+    return "default";
+  };
+
+  const handleNext = () => {
+    // 1. Date Validation
+    if (!schedule.startDate) {
+      alert("Veuillez sélectionner au moins une date de début.");
+      return;
+    }
+
+    // 2. Time Validation (End must be after Start)
+    const startHour = parseInt(schedule.startTime.split(':')[0]);
+    const endHour = parseInt(schedule.endTime.split(':')[0]);
+
+    if (endHour <= startHour) {
+        alert("L'heure de fin doit être après l'heure de début.");
+        return;
+    }
+
     setStep(4);
   };
 
@@ -39,11 +81,11 @@ export default function StepSchedule() {
     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
       
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Quand devons-nous passer ?</h2>
-        <p className="text-gray-500">Choisissez une date et votre créneau horaire préféré.</p>
+        <h2 className="text-2xl font-bold text-gray-900">Vos disponibilités</h2>
+        <p className="text-gray-500">Sélectionnez vos dates et horaires précis.</p>
       </div>
 
-      {/* --- Frequency Selection (Clean Version - No Discount Badges) --- */}
+      {/* --- Frequency --- */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
           { id: "one-time", label: "Une seule fois" },
@@ -71,33 +113,39 @@ export default function StepSchedule() {
 
       <div className="h-px bg-gray-100" />
 
-      {/* --- Date Selection --- */}
+      {/* --- Date Selection (Range) --- */}
       <div className="space-y-3">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Calendar className="h-4 w-4 text-cyan-600" />
-          Choisir une date
+        <label className="flex items-center justify-between text-sm font-medium text-gray-700">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-cyan-600" />
+            Sélectionnez les dates
+          </div>
+          <span className="text-xs text-cyan-600 bg-cyan-50 px-2 py-1 rounded-full">
+            {schedule.endDate ? "Période définie" : (schedule.startDate ? "Sélectionnez la fin" : "Sélectionnez une date")}
+          </span>
         </label>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+        
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-7">
           {dates.map((date) => {
-            // Compare dates without time to ensure matching works
-            const isSelected = schedule.date 
-              ? new Date(schedule.date).toDateString() === date.toDateString()
-              : false;
+            const status = getDateStatus(date);
+            
+            let className = "border-gray-200 bg-white text-gray-600 hover:border-cyan-300 hover:bg-cyan-50"; 
+            if (status === "selected") {
+              className = "border-cyan-500 bg-cyan-600 text-white shadow-md ring-2 ring-cyan-200";
+            } else if (status === "in-range") {
+              className = "border-cyan-200 bg-cyan-100 text-cyan-800";
+            }
 
             return (
               <button
                 key={date.toISOString()}
-                onClick={() => setSchedule({ ...schedule, date: date })}
+                onClick={() => handleDateClick(date)}
                 className={`
                   flex flex-col items-center justify-center rounded-xl border py-3 transition-all
-                  ${isSelected
-                    ? "border-cyan-500 bg-cyan-600 text-white shadow-md"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-cyan-300 hover:bg-cyan-50"
-                  }
+                  ${className}
                 `}
               >
-                <span className="text-xs font-medium opacity-80 capitalize">
-                  {/* French Locale for Days (lun., mar., etc.) */}
+                <span className={`text-xs font-medium capitalize ${status === 'selected' ? 'opacity-100' : 'opacity-60'}`}>
                   {date.toLocaleDateString("fr-FR", { weekday: "short" })}
                 </span>
                 <span className="text-lg font-bold">
@@ -109,32 +157,53 @@ export default function StepSchedule() {
         </div>
       </div>
 
-      {/* --- Time Selection --- */}
+      {/* --- Time Selection (Precise Hours) --- */}
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <Clock className="h-4 w-4 text-cyan-600" />
-          Heure préférée
+          Créneau horaire
         </label>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {timeSlots.map((time) => {
-            const isSelected = schedule.timeSlot === time;
-            return (
-              <button
-                key={time}
-                onClick={() => setSchedule({ ...schedule, timeSlot: time })}
-                className={`
-                  rounded-lg border py-3 text-sm font-medium transition-all
-                  ${isSelected
-                    ? "border-cyan-500 bg-cyan-100 text-cyan-900 ring-1 ring-cyan-500"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-cyan-300"
-                  }
-                `}
-              >
-                {time}
-              </button>
-            );
-          })}
+        
+        <div className="flex items-center gap-4">
+            {/* Start Time */}
+            <div className="flex-1 space-y-1">
+                <span className="text-xs text-gray-500 font-bold uppercase">De</span>
+                <div className="relative">
+                    <select
+                        value={schedule.startTime}
+                        onChange={(e) => setSchedule({ ...schedule, startTime: e.target.value })}
+                        className="w-full appearance-none rounded-xl border border-gray-200 bg-white py-3 pl-4 pr-10 font-bold text-gray-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                    >
+                        {hours.map((h) => (
+                            <option key={`start-${h}`} value={h}>{h}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            <div className="pt-5 text-gray-400">
+                <ArrowRight className="h-5 w-5" />
+            </div>
+
+            {/* End Time */}
+            <div className="flex-1 space-y-1">
+                <span className="text-xs text-gray-500 font-bold uppercase">À</span>
+                <div className="relative">
+                    <select
+                        value={schedule.endTime}
+                        onChange={(e) => setSchedule({ ...schedule, endTime: e.target.value })}
+                        className="w-full appearance-none rounded-xl border border-gray-200 bg-white py-3 pl-4 pr-10 font-bold text-gray-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+                    >
+                        {hours.map((h) => (
+                            <option key={`end-${h}`} value={h}>{h}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
         </div>
+        <p className="text-xs text-gray-400">
+           Durée estimée : {Math.max(0, parseInt(schedule.endTime) - parseInt(schedule.startTime))} heures
+        </p>
       </div>
 
       {/* --- Navigation --- */}
