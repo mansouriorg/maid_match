@@ -1,6 +1,7 @@
 "use client";
 
 import { useWizardStore } from "../store/use-wizard-store";
+import { api } from "@/lib/api"; 
 import { ArrowLeft, CheckCircle2, MapPin, Calendar, Phone, Loader2, Sparkles, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,8 +10,9 @@ export default function StepSummary() {
   const { contact, property, schedule, setStep, reset } = useWizardStore();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // --- HELPER MAPS FOR TRANSLATION ---
+  // --- HELPER MAPS ---
   const typeLabels: Record<string, string> = {
     apartment: "Appartement",
     villa: "Maison",
@@ -37,6 +39,8 @@ export default function StepSummary() {
   // --- LOGIC FOR DATE DISPLAY ---
   const renderDate = () => {
     if (!schedule.startDate) return "Date non sélectionnée";
+    
+    // We safely create a date object because of the check above
     const start = new Date(schedule.startDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' });
     
     if (schedule.endDate) {
@@ -46,12 +50,68 @@ export default function StepSummary() {
     return new Date(schedule.startDate).toLocaleDateString("fr-FR", { weekday: 'long', day: 'numeric', month: 'long' });
   };
 
+  // --- API SUBMISSION LOGIC ---
   const handleConfirm = async () => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log("Booking Request Sent!", { contact, property, schedule });
-    reset();
-    router.push("/success");
+    setError(null);
+
+    // FIX: Explicitly check if startDate is null before using it
+    if (!schedule.startDate) {
+        setError("Veuillez sélectionner une date de début.");
+        setIsSubmitting(false);
+        return;
+    }
+
+    try {
+      // 1. Merge Date and Time
+      // TypeScript now knows schedule.startDate is not null here
+      const combinedDate = new Date(schedule.startDate);
+      
+      // Extract the hour (e.g. "14:00" -> 14)
+      const startHour = parseInt(schedule.startTime.split(':')[0]); 
+      combinedDate.setHours(startHour, 0, 0, 0);
+
+      // 2. Calculate Duration
+      const duration = Math.max(1, parseInt(schedule.endTime) - parseInt(schedule.startTime));
+
+      // 3. Construct Payload
+      const payload = {
+        customerName: contact.name,
+        customerEmail: contact.email,
+        customerPhone: contact.phone,
+        
+        address: property.address,
+        propertyType: property.type,
+        rooms: property.rooms,
+        bathrooms: property.bathrooms,
+        cleaningType: property.cleaningType,
+        hasSupplies: property.hasSupplies,
+        extras: property.extras || [],
+        
+        startTime: combinedDate.toISOString(),
+        durationHours: duration,
+        frequency: schedule.frequency,
+        
+        status: "REQUESTED"
+      };
+
+      // 4. Send Request
+      await api.post("/service-requests", payload);
+
+      // 5. Success
+      console.log("Booking Success");
+      reset();
+      router.push("/success");
+
+    } catch (err: any) {
+      console.error("Submission error:", err);
+      setError(
+        err.response?.data?.message || 
+        "Une erreur est survenue lors de l'envoi. Veuillez vérifier votre connexion."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -61,6 +121,14 @@ export default function StepSummary() {
         <h2 className="text-2xl font-bold text-slate-900">Récapitulatif</h2>
         <p className="text-slate-500">Vérifiez les détails avant l'envoi. Nous vous appellerons pour le devis.</p>
       </div>
+
+      {/* ERROR BANNER */}
+      {error && (
+        <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600 animate-in fade-in zoom-in-95">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <span className="font-medium">{error}</span>
+        </div>
+      )}
 
       <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-5">
         
@@ -157,7 +225,7 @@ export default function StepSummary() {
         <button
           onClick={handleConfirm}
           disabled={isSubmitting}
-          className="flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-400"
+          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
         >
           {isSubmitting ? (
             <>
@@ -167,7 +235,7 @@ export default function StepSummary() {
           ) : (
             <>
               Envoyer la demande
-              <CheckCircle2 className="ml-2 h-4 w-4" />
+              <CheckCircle2 className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </>
           )}
         </button>
