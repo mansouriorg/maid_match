@@ -2,15 +2,21 @@
 
 import { useWizardStore } from "../store/use-wizard-store";
 import { api } from "@/lib/api"; 
-import { ArrowLeft, CheckCircle2, MapPin, Calendar, Phone, Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, MapPin, Calendar, Loader2, Sparkles, AlertCircle, Receipt } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function StepSummary() {
-  const { contact, property, schedule, setStep, reset } = useWizardStore();
+  // NOUVEAU : On récupère getDurationHours du store
+  const { contact, property, schedule, setStep, reset, getDurationHours } = useWizardStore();
   const router = useRouter();
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // NOUVEAU : États pour la tarification dynamique
+  const [hourlyRate, setHourlyRate] = useState<number | null>(null);
+  const [isLoadingPrice, setIsLoadingPrice] = useState(true);
 
   // --- HELPER MAPS ---
   const typeLabels: Record<string, string> = {
@@ -36,11 +42,57 @@ export default function StepSummary() {
     keys: "Clés au gardien",
   };
 
+  // --- NOUVEAU : CHARGEMENT DU PRIX DEPUIS LE BACKEND ---
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get("/settings");
+        if (res.data && res.data.defaultHourlyRate) {
+          setHourlyRate(res.data.defaultHourlyRate);
+        } else {
+          setHourlyRate(15); // Fallback
+        }
+      } catch (error) {
+        console.error("Erreur de récupération du tarif :", error);
+        setHourlyRate(15); // Fallback de sécurité en cas d'erreur réseau
+      } finally {
+        setIsLoadingPrice(false);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  // --- NOUVEAU : CALCUL DU PRIX TOTAL ---
+  const calculateTotal = () => {
+    if (hourlyRate === null) return 0;
+    
+    let currentRate = hourlyRate;
+    const durationHours = getDurationHours();
+
+    // Majoration pour le Deep Clean
+    if (property.cleaningType === 'deep') {
+      currentRate += 5;
+    }
+
+    let total = durationHours * currentRate;
+
+    // Frais fixes si aucun matériel n'est fourni
+    if (!property.hasSupplies) {
+      total += 20; 
+    }
+
+    // Frais pour les extras (10 TND par extra)
+    if (property.extras && property.extras.length > 0) {
+      total += (property.extras.length * 10); 
+    }
+
+    return total;
+  };
+
   // --- LOGIC FOR DATE DISPLAY ---
   const renderDate = () => {
     if (!schedule.startDate) return "Date non sélectionnée";
     
-    // We safely create a date object because of the check above
     const start = new Date(schedule.startDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long' });
     
     if (schedule.endDate) {
@@ -55,7 +107,6 @@ export default function StepSummary() {
     setIsSubmitting(true);
     setError(null);
 
-    // FIX: Explicitly check if startDate is null before using it
     if (!schedule.startDate) {
         setError("Veuillez sélectionner une date de début.");
         setIsSubmitting(false);
@@ -63,18 +114,13 @@ export default function StepSummary() {
     }
 
     try {
-      // 1. Merge Date and Time
-      // TypeScript now knows schedule.startDate is not null here
       const combinedDate = new Date(schedule.startDate);
-      
-      // Extract the hour (e.g. "14:00" -> 14)
       const startHour = parseInt(schedule.startTime.split(':')[0]); 
       combinedDate.setHours(startHour, 0, 0, 0);
 
-      // 2. Calculate Duration
-      const duration = Math.max(1, parseInt(schedule.endTime) - parseInt(schedule.startTime));
+      // On utilise maintenant notre fonction du store plutôt que le calcul manuel
+      const duration = getDurationHours();
 
-      // 3. Construct Payload
       const payload = {
         customerName: contact.name,
         customerEmail: contact.email,
@@ -95,10 +141,8 @@ export default function StepSummary() {
         status: "REQUESTED"
       };
 
-      // 4. Send Request
       await api.post("/service-requests", payload);
 
-      // 5. Success
       console.log("Booking Success");
       reset();
       router.push("/success");
@@ -119,7 +163,7 @@ export default function StepSummary() {
       
       <div className="mb-2">
         <h2 className="text-2xl font-bold text-slate-900">Récapitulatif</h2>
-        <p className="text-slate-500">Vérifiez les détails avant l'envoi. Nous vous appellerons pour le devis.</p>
+        <p className="text-slate-500">Vérifiez les détails et l'estimation du tarif avant de valider.</p>
       </div>
 
       {/* ERROR BANNER */}
@@ -130,6 +174,7 @@ export default function StepSummary() {
         </div>
       )}
 
+      {/* DÉTAILS DE LA PRESTATION */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-5">
         
         <div className="flex justify-between items-start">
@@ -183,7 +228,7 @@ export default function StepSummary() {
                 <div className="flex items-center gap-3 text-slate-700">
                     <span className="text-slate-300 hidden sm:inline">|</span>
                     <span className="font-medium text-teal-800 bg-teal-50 px-2 py-0.5 rounded">
-                        {schedule.startTime} - {schedule.endTime}
+                        {schedule.startTime} - {schedule.endTime} ({getDurationHours()}h)
                     </span>
                 </div>
             </div>
@@ -194,37 +239,47 @@ export default function StepSummary() {
                     {property.address || "Adresse non fournie"}
                 </span>
             </div>
-             <div className="flex items-center gap-3 text-slate-700">
-                <CheckCircle2 className="h-4 w-4 text-teal-600 flex-shrink-0" />
-                <span>Contact : <span className="font-semibold">{contact.name}</span> ({contact.phone})</span>
-            </div>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-teal-100 bg-teal-50/50 p-5 flex gap-4 items-start">
-         <div className="mt-1 flex-shrink-0 rounded-full bg-teal-100 p-2 text-teal-600">
-            <Phone className="h-5 w-5" />
+      {/* NOUVEAU : CARTE DU DEVIS DYNAMIQUE */}
+      <div className="rounded-2xl border border-teal-100 bg-teal-50/50 p-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+         <div className="flex items-center gap-4 w-full sm:w-auto">
+             <div className="flex-shrink-0 rounded-full bg-teal-100 p-3 text-teal-600">
+                <Receipt className="h-6 w-6" />
+             </div>
+             <div>
+                <h4 className="font-bold text-teal-900 text-lg">Estimation du devis</h4>
+                <p className="text-sm text-teal-800">
+                    Calculé selon le tarif actuel de l'entreprise
+                </p>
+             </div>
          </div>
-         <div className="space-y-1">
-            <h4 className="font-bold text-teal-900">Dernière étape : Devis par téléphone</h4>
-            <p className="text-sm text-teal-800 leading-relaxed">
-                Notre équipe vous appellera au <strong>{contact.phone}</strong> très rapidement pour valider les dates et le tarif.
-            </p>
+         
+         <div className="bg-white px-6 py-3 rounded-xl border border-teal-100 shadow-sm w-full sm:w-auto text-center sm:text-right">
+             {isLoadingPrice ? (
+                 <Loader2 className="h-6 w-6 animate-spin text-teal-600 mx-auto sm:ml-auto sm:mr-0" />
+             ) : (
+                 <div className="text-3xl font-extrabold text-teal-700">
+                    {calculateTotal()} <span className="text-lg font-bold text-teal-600">TND</span>
+                 </div>
+             )}
          </div>
       </div>
 
+      {/* BOUTONS D'ACTION */}
       <div className="flex gap-4 pt-4">
         <button
           onClick={() => setStep(3)}
           disabled={isSubmitting}
-          className="flex flex-1 items-center justify-center rounded-full border border-slate-200 py-3.5 text-sm font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+          className="flex flex-1 items-center justify-center rounded-full border border-slate-200 bg-white py-3.5 text-sm font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Retour
         </button>
         <button
           onClick={handleConfirm}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLoadingPrice}
           className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
         >
           {isSubmitting ? (
@@ -234,7 +289,7 @@ export default function StepSummary() {
             </>
           ) : (
             <>
-              Envoyer la demande
+              Confirmer la réservation
               <CheckCircle2 className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </>
           )}

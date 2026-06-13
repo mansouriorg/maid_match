@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -11,6 +15,26 @@ import {
 } from "lucide-react";
 
 export default function LandingPage() {
+  // État pour stocker le prix de base (on met "..." ou "15" par défaut le temps que ça charge)
+  const [basePrice, setBasePrice] = useState<number | string>("15");
+
+  // Requête API pour récupérer le paramètre dynamique au chargement
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get("/settings");
+        if (res.data && res.data.defaultHourlyRate) {
+          setBasePrice(res.data.defaultHourlyRate);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du tarif :", error);
+        // Si l'API ne répond pas, le prix restera à "15" (fallback de sécurité)
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 font-sans selection:bg-teal-100 selection:text-teal-900">
       
@@ -83,9 +107,9 @@ export default function LandingPage() {
                 </Link>
               </div>
 
-              {/* Subtly Added Pricing Under the Buttons */}
+              {/* DYNAMIQUE : Affichage du tarif réel sous les boutons */}
               <p className="text-sm font-medium text-slate-500 animate-in fade-in duration-700 delay-300">
-                Tarif simple et transparent à partir de <span className="font-bold text-teal-600">15 TND / heure</span>.
+                Tarif simple et transparent à partir de <span className="font-bold text-teal-600">{basePrice} TND / heure</span>.
               </p>
 
               {/* Trust Badges */}
@@ -192,14 +216,15 @@ export default function LandingPage() {
                           <p className="text-slate-400 mt-1">Besoin d'un ménage urgent ? Nos équipes sont prêtes à intervenir.</p>
                         </div>
                       </div>
-                      {/* Subtly Added Pricing Point */}
+                      
+                      {/* DYNAMIQUE : Affichage du tarif réel dans la section argumentaire */}
                       <div className="flex gap-4">
                          <div className="flex-shrink-0 mt-1 rounded-full bg-slate-800 p-2">
                           <CheckCircle2 className="h-6 w-6 text-teal-400" />
                         </div>
                         <div>
                           <h4 className="font-bold text-xl">Tarifs Transparents</h4>
-                          <p className="text-slate-400 mt-1">À partir de 15 TND/h. Pas de frais cachés, vous savez exactement ce que vous payez dès la réservation.</p>
+                          <p className="text-slate-400 mt-1">À partir de {basePrice} TND/h. Pas de frais cachés, vous savez exactement ce que vous payez dès la réservation.</p>
                         </div>
                       </div>
                    </div>

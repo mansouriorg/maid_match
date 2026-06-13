@@ -26,7 +26,7 @@ interface BookingData {
     startDate: Date | null;
     endDate: Date | null; // Can be null if only 1 day is selected
     
-    // --- UPDATED: PRECISE TIME RANGE ---
+    // --- PRECISE TIME RANGE ---
     startTime: string; // e.g. "09:00"
     endTime: string;   // e.g. "13:00"
     
@@ -41,11 +41,14 @@ interface WizardState extends BookingData {
   setProperty: (property: Partial<BookingData['property']>) => void;
   setSchedule: (schedule: Partial<BookingData['schedule']>) => void;
   reset: () => void;
+  
+  // NOUVEAU : Fonction utilitaire pour le calcul du prix et l'envoi au backend
+  getDurationHours: () => number;
 }
 
 export const useWizardStore = create<WizardState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       // Initial State
       step: 1,
       contact: { name: '', phone: '', email: '' },
@@ -60,7 +63,6 @@ export const useWizardStore = create<WizardState>()(
         hasSupplies: true,
         extras: [] 
       },
-      // Updated Schedule State with Start/End times
       schedule: { 
         startDate: null, 
         endDate: null, 
@@ -75,6 +77,22 @@ export const useWizardStore = create<WizardState>()(
       setProperty: (property) => set((state) => ({ property: { ...state.property, ...property } })),
       setSchedule: (schedule) => set((state) => ({ schedule: { ...state.schedule, ...schedule } })),
       
+      // NOUVEAU : Calcule automatiquement la différence entre startTime et endTime
+      getDurationHours: () => {
+        const { startTime, endTime } = get().schedule;
+        if (!startTime || !endTime) return 0;
+        
+        // Convertir "09:30" en heures décimales (ex: 9.5)
+        const [startHour, startMin] = startTime.split(':').map(Number);
+        const [endHour, endMin] = endTime.split(':').map(Number);
+        
+        const startInDecimal = startHour + (startMin / 60);
+        const endInDecimal = endHour + (endMin / 60);
+        
+        const duration = endInDecimal - startInDecimal;
+        return duration > 0 ? duration : 0; // Sécurité pour éviter les nombres négatifs
+      },
+
       // Reset Code
       reset: () => set({ 
         step: 1,
