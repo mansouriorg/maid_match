@@ -83,8 +83,13 @@ export default function LandingPage() {
                 </Link>
               </div>
 
+              {/* Subtly Added Pricing Under the Buttons */}
+              <p className="text-sm font-medium text-slate-500 animate-in fade-in duration-700 delay-300">
+                Tarif simple et transparent à partir de <span className="font-bold text-teal-600">15 TND / heure</span>.
+              </p>
+
               {/* Trust Badges */}
-              <div className="pt-12 grid grid-cols-1 gap-6 sm:grid-cols-3 text-sm font-medium text-slate-500">
+              <div className="pt-10 grid grid-cols-1 gap-6 sm:grid-cols-3 text-sm font-medium text-slate-500">
                 <div className="flex items-center justify-center gap-3 rounded-2xl border border-slate-100 bg-white/50 p-4 shadow-sm backdrop-blur-sm">
                   <div className="rounded-full bg-emerald-100 p-1">
                     <CheckCircle2 className="h-5 w-5 text-emerald-600" />
@@ -158,7 +163,7 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
              <div className="grid gap-16 md:grid-cols-2 items-center">
                 <div>
-                   <h2 className="text-3xl font-bold sm:text-4xl mb-6">Pourquoi nous choisir ?</h2>
+                   <h2 className="text-3xl font-bold sm:text-4xl mb-8">Pourquoi nous choisir ?</h2>
                    <div className="space-y-8">
                       <div className="flex gap-4">
                         <div className="flex-shrink-0 mt-1 rounded-full bg-slate-800 p-2">
@@ -187,11 +192,21 @@ export default function LandingPage() {
                           <p className="text-slate-400 mt-1">Besoin d'un ménage urgent ? Nos équipes sont prêtes à intervenir.</p>
                         </div>
                       </div>
+                      {/* Subtly Added Pricing Point */}
+                      <div className="flex gap-4">
+                         <div className="flex-shrink-0 mt-1 rounded-full bg-slate-800 p-2">
+                          <CheckCircle2 className="h-6 w-6 text-teal-400" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-xl">Tarifs Transparents</h4>
+                          <p className="text-slate-400 mt-1">À partir de 15 TND/h. Pas de frais cachés, vous savez exactement ce que vous payez dès la réservation.</p>
+                        </div>
+                      </div>
                    </div>
                 </div>
                 
                 {/* Stats Card */}
-                <div className="relative h-96 rounded-3xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 border border-slate-700 shadow-2xl">
+                <div className="relative h-[420px] rounded-3xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 border border-slate-700 shadow-2xl">
                    {/* Abstract representation of a clean house */}
                    <div className="absolute inset-0 flex items-center justify-center text-slate-800 opacity-50">
                       <Home className="h-64 w-64" />
