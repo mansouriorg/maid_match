@@ -1,5 +1,7 @@
 "use client";
 
+import { parisWallTimeToIso, ymdOf } from "../../../lib/time";
+
 import { useWizardStore } from "../store/use-wizard-store";
 import { api } from "@/lib/api"; 
 import { ArrowLeft, CheckCircle2, MapPin, Calendar, Loader2, Sparkles, AlertCircle, Receipt } from "lucide-react";
@@ -28,7 +30,7 @@ export default function StepSummary() {
   const frequencyLabels: Record<string, string> = {
     "one-time": "Une seule fois",
     "weekly": "Hebdomadaire",
-    "bi-weekly": "Bi-mensuel",
+    "bi-weekly": "Toutes les 2 semaines",
   };
 
   const cleaningTypeLabels: Record<string, string> = {
@@ -81,7 +83,7 @@ export default function StepSummary() {
       total += 20; 
     }
 
-    // Frais pour les extras (10 TND par extra)
+    // Frais pour les extras (10 euros par extra)
     if (property.extras && property.extras.length > 0) {
       total += (property.extras.length * 10); 
     }
@@ -114,9 +116,10 @@ export default function StepSummary() {
     }
 
     try {
-      const combinedDate = new Date(schedule.startDate);
-      const startHour = parseInt(schedule.startTime.split(':')[0]); 
-      combinedDate.setHours(startHour, 0, 0, 0);
+      // The day and the hour are Paris time, wherever the visitor is (lib/time.ts).
+      const combinedDate = new Date(
+        parisWallTimeToIso(ymdOf(schedule.startDate), schedule.startTime),
+      );
 
       // On utilise maintenant notre fonction du store plutôt que le calcul manuel
       const duration = getDurationHours();
@@ -137,7 +140,7 @@ export default function StepSummary() {
         startTime: combinedDate.toISOString(),
         // The last day the customer is available (sent only when a period was chosen).
         endDate: schedule.endDate
-          ? new Date(new Date(schedule.endDate).setHours(startHour, 0, 0, 0)).toISOString()
+          ? parisWallTimeToIso(ymdOf(schedule.endDate), schedule.startTime)
           : undefined,
         durationHours: duration,
         frequency: schedule.frequency,
@@ -147,7 +150,6 @@ export default function StepSummary() {
 
       await api.post("/service-requests", payload);
 
-      console.log("Booking Success");
       reset();
       router.push("/success");
 

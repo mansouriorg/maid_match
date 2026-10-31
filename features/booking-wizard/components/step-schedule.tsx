@@ -93,7 +93,7 @@ export default function StepSchedule() {
         {[
           { id: "one-time", label: "Une seule fois" },
           { id: "weekly", label: "Hebdomadaire" },
-          { id: "bi-weekly", label: "Bi-mensuel" },
+          { id: "bi-weekly", label: "Toutes les 2 semaines" },
         ].map((option) => {
           const isSelected = schedule.frequency === option.id;
           return (
