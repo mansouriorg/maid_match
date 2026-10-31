@@ -13,11 +13,12 @@ import StepSummary from "../../features/booking-wizard/components/step-summary";
 
 export default function BookingWizardPage() {
   // Use Zustand store
-  const { step, setStep } = useWizardStore();
+  const { step } = useWizardStore();
   
   // Prevent hydration mismatch (Next.js server vs client state)
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration guard: the wizard state is read from browser storage, so the page waits for the first render in the browser
     setMounted(true);
   }, []);
 
@@ -58,14 +59,14 @@ export default function BookingWizardPage() {
       <div className="space-y-4">
         <div className="flex justify-between text-sm font-medium text-gray-500">
           <span>Étape {step} sur {totalSteps}</span>
-          <span className="text-cyan-600">{Math.round(progress)}% complété</span>
+          <span className="text-teal-700">{Math.round(progress)}% complété</span>
         </div>
         
         {/* The Track */}
         <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
           {/* The Fill */}
           <div 
-            className="h-full bg-gradient-to-r from-cyan-400 to-teal-500 transition-all duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-teal-400 to-teal-500 transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -82,14 +83,14 @@ export default function BookingWizardPage() {
                 <div 
                   className={`
                     flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors duration-300
-                    ${isCompleted ? "border-cyan-500 bg-cyan-500 text-white" : ""}
-                    ${isCurrent ? "border-cyan-500 bg-white text-cyan-600 shadow-md ring-4 ring-cyan-100" : ""}
+                    ${isCompleted ? "border-teal-500 bg-teal-500 text-white" : ""}
+                    ${isCurrent ? "border-teal-500 bg-white text-teal-700 shadow-md ring-4 ring-teal-100" : ""}
                     ${!isCompleted && !isCurrent ? "border-gray-200 bg-white text-gray-300" : ""}
                   `}
                 >
                   {isCompleted ? <Check className="h-4 w-4" /> : <span className="text-xs font-bold">{stepNum}</span>}
                 </div>
-                <span className={`text-xs font-medium ${isCurrent ? 'text-cyan-700' : 'text-gray-400'}`}>
+                <span className={`text-xs font-medium ${isCurrent ? 'text-teal-700' : 'text-gray-500'}`}>
                   {label}
                 </span>
               </div>

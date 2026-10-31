@@ -4,8 +4,8 @@ import { FileQuestion, ArrowLeft } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 text-center">
-      <div className="mb-6 rounded-full bg-cyan-100 p-6">
-        <FileQuestion className="h-12 w-12 text-cyan-600" />
+      <div className="mb-6 rounded-full bg-teal-100 p-6">
+        <FileQuestion className="h-12 w-12 text-teal-700" />
       </div>
       
       <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">
@@ -18,10 +18,10 @@ export default function NotFound() {
 
       <Link
         href="/"
-        className="inline-flex items-center justify-center rounded-lg bg-cyan-600 px-6 py-3 text-sm font-medium text-white shadow-md transition-colors hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+        className="inline-flex items-center justify-center rounded-lg bg-teal-700 px-6 py-3 text-sm font-medium text-white shadow-md transition-colors hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Retour à l'accueil
+        Retour à l&rsquo;accueil
       </Link>
     </div>
   );

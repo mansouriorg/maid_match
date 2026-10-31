@@ -12,6 +12,7 @@ export default function StepProperty() {
   
   // Local state for address (synced to store on change)
   const [address, setAddress] = useState(property.address);
+  const [addressError, setAddressError] = useState<string | null>(null);
 
   // Helper to toggle items in the extras array
   const toggleExtra = (key: string) => {
@@ -24,8 +25,9 @@ export default function StepProperty() {
   };
 
   const handleNext = () => {
-    if (!address) {
-      alert("Veuillez entrer votre adresse complète.");
+    if (address.trim() === "") {
+      setAddressError("Veuillez entrer votre adresse complète.");
+      document.getElementById("property-address")?.focus();
       return;
     }
     setProperty({ ...property, address }); // Ensure address is saved
@@ -56,7 +58,8 @@ export default function StepProperty() {
               return (
                 <button
                   key={type.id}
-                  onClick={() => setProperty({ ...property, type: type.id as any })}
+                  aria-pressed={property.type === type.id}
+                  onClick={() => setProperty({ ...property, type: type.id as typeof property.type })}
                   className={`
                     flex flex-col items-center justify-center gap-2 rounded-xl border p-3 transition-all
                     ${isSelected 
@@ -80,6 +83,7 @@ export default function StepProperty() {
                 <span className="text-xs font-bold text-slate-500 uppercase">Pièces</span>
                 <div className="flex items-center gap-3">
                     <button 
+                        aria-label={"Retirer une pi\u00e8ce"}
                         onClick={() => setProperty({ ...property, rooms: Math.max(1, property.rooms - 1) })}
                         className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 text-slate-600 font-bold transition-colors"
                     >
@@ -87,6 +91,7 @@ export default function StepProperty() {
                     </button>
                     <span className="font-bold text-xl w-6 text-center text-slate-900">{property.rooms}</span>
                     <button 
+                        aria-label={"Ajouter une pi\u00e8ce"}
                         onClick={() => setProperty({ ...property, rooms: property.rooms + 1 })}
                         className="h-8 w-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center hover:bg-teal-200 font-bold transition-colors"
                     >
@@ -100,6 +105,7 @@ export default function StepProperty() {
                 <span className="text-xs font-bold text-slate-500 uppercase">SDB</span>
                 <div className="flex items-center gap-3">
                     <button 
+                        aria-label={"Retirer une salle de bain"}
                         onClick={() => setProperty({ ...property, bathrooms: Math.max(1, property.bathrooms - 1) })}
                         className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 text-slate-600 font-bold transition-colors"
                     >
@@ -107,6 +113,7 @@ export default function StepProperty() {
                     </button>
                     <span className="font-bold text-xl w-6 text-center text-slate-900">{property.bathrooms}</span>
                     <button 
+                        aria-label={"Ajouter une salle de bain"}
                         onClick={() => setProperty({ ...property, bathrooms: property.bathrooms + 1 })}
                         className="h-8 w-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center hover:bg-teal-200 font-bold transition-colors"
                     >
@@ -121,6 +128,7 @@ export default function StepProperty() {
              <label className="text-sm font-bold text-slate-900">Type de prestation</label>
              <div className="grid grid-cols-2 gap-3">
                 <button
+                    aria-pressed={property.cleaningType === 'standard'}
                     onClick={() => setProperty({ ...property, cleaningType: 'standard' })}
                     className={`text-left p-3 rounded-xl border transition-all ${
                         property.cleaningType === 'standard' ? 'border-teal-600 bg-teal-50 ring-1 ring-teal-600' : 'border-slate-200 hover:bg-slate-50'
@@ -130,9 +138,10 @@ export default function StepProperty() {
                     <div className="text-xs text-slate-500 mt-1">Entretien courant, sols et poussière.</div>
                 </button>
                 <button
+                    aria-pressed={property.cleaningType === 'deep'}
                     onClick={() => setProperty({ ...property, cleaningType: 'deep' })}
                     className={`text-left p-3 rounded-xl border transition-all ${
-                        property.cleaningType === 'deep' ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500' : 'border-slate-200 hover:bg-slate-50'
+                        property.cleaningType === 'deep' ? 'border-teal-500 bg-teal-50 ring-1 ring-teal-500' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                 >
                     <div className="font-bold text-sm text-slate-900">🧼 Grand Ménage</div>
@@ -147,12 +156,13 @@ export default function StepProperty() {
             <div className="grid grid-cols-2 gap-3">
                 {/* Repassage */}
                 <button 
+                    aria-pressed={Boolean(property.extras?.includes('ironing'))}
                     onClick={() => toggleExtra('ironing')}
                     className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
                         property.extras?.includes('ironing') ? 'border-teal-600 bg-teal-50' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                 >
-                    <Shirt className="h-5 w-5 text-teal-600" />
+                    <Shirt className="h-5 w-5 text-teal-700" />
                     <span className="text-sm font-medium text-slate-700">Repassage</span>
                 </button>
 
@@ -163,32 +173,34 @@ export default function StepProperty() {
                         !property.hasSupplies ? 'border-orange-500 bg-orange-50' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                 >
-                    <SprayCan className={`h-5 w-5 ${!property.hasSupplies ? 'text-orange-600' : 'text-slate-400'}`} />
+                    <SprayCan className={`h-5 w-5 ${!property.hasSupplies ? 'text-orange-600' : 'text-slate-500'}`} />
                     <div className="text-left leading-none">
                         <span className="text-sm font-medium text-slate-700">Apporter produits</span>
-                        <div className="text-[10px] text-slate-400 mt-1">Si vous n'avez rien</div>
+                        <div className="text-xs text-slate-400 mt-1">Si vous n&rsquo;avez rien</div>
                     </div>
                 </button>
 
                 {/* Animaux */}
                 <button 
+                    aria-pressed={Boolean(property.extras?.includes('pets'))}
                     onClick={() => toggleExtra('pets')}
                     className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
                         property.extras?.includes('pets') ? 'border-teal-600 bg-teal-50' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                 >
-                    <Cat className="h-5 w-5 text-teal-600" />
+                    <Cat className="h-5 w-5 text-teal-700" />
                     <span className="text-sm font-medium text-slate-700">Animaux</span>
                 </button>
 
                 {/* Clés (Concierge) */}
                 <button 
+                    aria-pressed={Boolean(property.extras?.includes('keys'))}
                     onClick={() => toggleExtra('keys')}
                     className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
                         property.extras?.includes('keys') ? 'border-teal-600 bg-teal-50' : 'border-slate-200 hover:bg-slate-50'
                     }`}
                 >
-                    <Key className="h-5 w-5 text-teal-600" />
+                    <Key className="h-5 w-5 text-teal-700" />
                     <div className="text-left leading-none">
                         <span className="text-sm font-medium text-slate-700">Clés au Gardien</span>
                     </div>
@@ -198,20 +210,30 @@ export default function StepProperty() {
 
         {/* --- 5. LOCATION INPUT --- */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-slate-900">Adresse</label>
+          <label htmlFor="property-address" className="text-sm font-bold text-slate-900">Adresse</label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-3 h-5 w-5 text-teal-600" />
+            <MapPin className="absolute left-3 top-3 h-5 w-5 text-teal-700" />
             <input
+              id="property-address"
+              autoComplete="street-address"
+              aria-invalid={addressError ? true : undefined}
+              aria-describedby={addressError ? "property-address-error" : undefined}
               value={address}
               onChange={(e) => {
                 setAddress(e.target.value);
+                setAddressError(null);
                 setProperty({ ...property, address: e.target.value });
               }}
               className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-slate-900 outline-none transition-all focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
               placeholder="ex: 12 Rue de Rivoli, 75004 Paris"
             />
           </div>
-          <p className="text-xs text-slate-400">Nous vérifions la disponibilité dans votre arrondissement.</p>
+          <p className="text-xs text-slate-500">Nous vérifions la disponibilité dans votre arrondissement.</p>
+          {addressError && (
+            <p id="property-address-error" role="alert" className="text-sm font-medium text-red-600">
+              {addressError}
+            </p>
+          )}
         </div>
 
         {/* --- Navigation Buttons --- */}
@@ -225,7 +247,7 @@ export default function StepProperty() {
           </button>
           <button
             onClick={handleNext}
-            className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl"
+            className="group flex flex-[2] items-center justify-center rounded-full bg-teal-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-800 hover:shadow-xl"
           >
             Suivant
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

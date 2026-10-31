@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment variables
+
+Copy `.env.example` to `.env`. Both values are public (they end up in the browser):
+
+- `NEXT_PUBLIC_API_URL`: address of the API (the `maidmatch-serveur` project).
+- `NEXT_PUBLIC_SITE_URL`: public address of this site, used for the sitemap and the
+  picture shown when a link to the site is shared.
+
 ## Getting Started
 
 First, run the development server:

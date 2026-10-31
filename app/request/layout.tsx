@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Sparkles, ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Demande de devis",
+  description:
+    "Quelques questions sur votre logement et vos dates pour recevoir un devis.",
+};
 
 export default function RequestLayout({
   children,
@@ -12,14 +19,14 @@ export default function RequestLayout({
       <header className="flex h-16 items-center border-b bg-white px-6 shadow-sm">
         <Link 
           href="/" 
-          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-cyan-600 transition-colors"
+          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-teal-700 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Cancel & Exit
+          Quitter
         </Link>
         
-        <div className="mx-auto flex items-center gap-2 font-bold text-xl text-cyan-600">
-           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-teal-500 text-white shadow-md">
+        <div className="mx-auto flex items-center gap-2 font-bold text-xl text-teal-700">
+           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-teal-400 to-teal-500 text-white shadow-md">
              <Sparkles className="h-4 w-4 fill-white" />
            </div>
            MaidMatch
@@ -34,8 +41,8 @@ export default function RequestLayout({
       </main>
       
       {/* Simple Footer */}
-      <footer className="py-6 text-center text-xs text-gray-400">
-        <p>🔒 SSL Secure Connection. Your data is encrypted.</p>
+      <footer className="py-6 text-center text-xs text-gray-500">
+        <p>🔒 Vos informations sont envoy&eacute;es sur une connexion chiffr&eacute;e.</p>
       </footer>
     </div>
   );

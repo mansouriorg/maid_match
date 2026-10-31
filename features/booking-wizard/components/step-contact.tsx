@@ -55,52 +55,58 @@ export default function StepContact() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Name Field */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">Nom et Prénom</label>
+          <label htmlFor="contact-name" className="text-sm font-medium text-slate-700">Nom et Prénom</label>
           <div className="relative">
-            <User className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+            <User className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
             <input
+              id="contact-name"
+              autoComplete="name"
               {...register("name")}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-slate-900 outline-none transition-all focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-100"
               placeholder="ex: Thomas Martin"
             />
           </div>
-          {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+          {errors.name && <p role="alert" className="text-xs text-red-600">{errors.name.message}</p>}
         </div>
 
         {/* Phone Field (French Format) */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">Numéro de mobile</label>
+          <label htmlFor="contact-phone" className="text-sm font-medium text-slate-700">Numéro de mobile</label>
           <div className="relative">
-            <Phone className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+            <Phone className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
             <input
+              id="contact-phone"
+              autoComplete="tel"
               {...register("phone")}
               type="tel"
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-slate-900 outline-none transition-all focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-100"
               placeholder="ex: 06 12 34 56 78"
             />
           </div>
-          {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
+          {errors.phone && <p role="alert" className="text-xs text-red-600">{errors.phone.message}</p>}
         </div>
 
         {/* Email Field */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">Adresse E-mail</label>
+          <label htmlFor="contact-email" className="text-sm font-medium text-slate-700">Adresse E-mail</label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
+            <Mail className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
             <input
+              id="contact-email"
+              autoComplete="email"
               {...register("email")}
               type="email"
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-slate-900 outline-none transition-all focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-100"
               placeholder="ex: thomas@exemple.fr"
             />
           </div>
-          {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+          {errors.email && <p role="alert" className="text-xs text-red-600">{errors.email.message}</p>}
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="group flex w-full items-center justify-center gap-2 rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:scale-[1.02] hover:bg-teal-700 hover:shadow-xl"
+          className="group flex w-full items-center justify-center gap-2 rounded-full bg-teal-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:scale-[1.02] hover:bg-teal-800 hover:shadow-xl"
         >
           Suivant
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

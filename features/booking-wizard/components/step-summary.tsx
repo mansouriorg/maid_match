@@ -147,7 +147,11 @@ export default function StepSummary() {
       reset();
       router.push("/success");
 
-    } catch (err: any) {
+    } catch (caught) {
+      const err = caught as {
+        message?: string;
+        response?: { status?: number; data?: { message?: string } };
+      };
       console.error("Submission error:", err);
       setError(
         err.response?.data?.message || 
@@ -163,7 +167,7 @@ export default function StepSummary() {
       
       <div className="mb-2">
         <h2 className="text-2xl font-bold text-slate-900">Récapitulatif</h2>
-        <p className="text-slate-500">Vérifiez les détails et l'estimation du tarif avant de valider.</p>
+        <p className="text-slate-500">Vérifiez les détails et l&rsquo;estimation du tarif avant de valider.</p>
       </div>
 
       {/* ERROR BANNER */}
@@ -181,7 +185,7 @@ export default function StepSummary() {
             <div>
                 <h3 className="font-bold text-slate-900 text-lg flex items-center gap-2">
                     {cleaningTypeLabels[property.cleaningType] || "Nettoyage"} 
-                    {property.cleaningType === 'deep' && <Sparkles className="h-4 w-4 text-indigo-500" />}
+                    {property.cleaningType === 'deep' && <Sparkles className="h-4 w-4 text-teal-600" />}
                 </h3>
                 <p className="text-sm text-slate-500 mt-1">
                     {typeLabels[property.type]} • {property.rooms} Pièces • {property.bathrooms} SDB
@@ -205,7 +209,7 @@ export default function StepSummary() {
 
             {property.extras && property.extras.length > 0 && (
                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-sm text-slate-700 flex flex-wrap gap-2 items-center">
-                    <span className="font-bold text-xs text-slate-400 uppercase mr-1">Options:</span>
+                    <span className="font-bold text-xs text-slate-500 uppercase mr-1">Options:</span>
                     {property.extras.map(extra => (
                         <span key={extra} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-white border border-slate-200 text-slate-700">
                             {extraLabels[extra] || extra}
@@ -220,7 +224,7 @@ export default function StepSummary() {
         <div className="space-y-3 text-sm">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                 <div className="flex items-center gap-3 text-slate-700">
-                    <Calendar className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                    <Calendar className="h-4 w-4 text-teal-700 flex-shrink-0" />
                     <span className="capitalize font-semibold">
                       {renderDate()}
                     </span>
@@ -234,7 +238,7 @@ export default function StepSummary() {
             </div>
             
             <div className="flex items-center gap-3 text-slate-700">
-                <MapPin className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                <MapPin className="h-4 w-4 text-teal-700 flex-shrink-0" />
                 <span className="truncate max-w-[250px]">
                     {property.address || "Adresse non fournie"}
                 </span>
@@ -245,23 +249,23 @@ export default function StepSummary() {
       {/* NOUVEAU : CARTE DU DEVIS DYNAMIQUE */}
       <div className="rounded-2xl border border-teal-100 bg-teal-50/50 p-5 flex flex-col sm:flex-row justify-between items-center gap-4">
          <div className="flex items-center gap-4 w-full sm:w-auto">
-             <div className="flex-shrink-0 rounded-full bg-teal-100 p-3 text-teal-600">
+             <div className="flex-shrink-0 rounded-full bg-teal-100 p-3 text-teal-700">
                 <Receipt className="h-6 w-6" />
              </div>
              <div>
                 <h4 className="font-bold text-teal-900 text-lg">Estimation du devis</h4>
                 <p className="text-sm text-teal-800">
-                    Calculé selon le tarif actuel de l'entreprise
+                    Calculé selon le tarif actuel de l&rsquo;entreprise
                 </p>
              </div>
          </div>
          
          <div className="bg-white px-6 py-3 rounded-xl border border-teal-100 shadow-sm w-full sm:w-auto text-center sm:text-right">
              {isLoadingPrice ? (
-                 <Loader2 className="h-6 w-6 animate-spin text-teal-600 mx-auto sm:ml-auto sm:mr-0" />
+                 <Loader2 className="h-6 w-6 animate-spin text-teal-700 mx-auto sm:ml-auto sm:mr-0" />
              ) : (
                  <div className="text-3xl font-extrabold text-teal-700">
-                    {calculateTotal()} <span className="text-lg font-bold text-teal-600">TND</span>
+                    {calculateTotal()} <span className="text-lg font-bold text-teal-700">&euro;</span>
                  </div>
              )}
          </div>
@@ -280,7 +284,7 @@ export default function StepSummary() {
         <button
           onClick={handleConfirm}
           disabled={isSubmitting || isLoadingPrice}
-          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-800 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
         >
           {isSubmitting ? (
             <>

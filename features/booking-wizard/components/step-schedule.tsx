@@ -2,9 +2,11 @@
 
 import { useWizardStore } from "../store/use-wizard-store";
 import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
+import { useState } from "react";
 
 export default function StepSchedule() {
   const { schedule, setSchedule, setStep } = useWizardStore();
+  const [scheduleError, setScheduleError] = useState<string | null>(null);
 
   // Generate next 14 days
   const generateDates = () => {
@@ -29,6 +31,7 @@ export default function StepSchedule() {
 
   // --- Date Range Logic ---
   const handleDateClick = (clickedDate: Date) => {
+    setScheduleError(null);
     const start = schedule.startDate ? new Date(schedule.startDate) : null;
     const end = schedule.endDate ? new Date(schedule.endDate) : null;
 
@@ -61,7 +64,7 @@ export default function StepSchedule() {
   const handleNext = () => {
     // 1. Date Validation
     if (!schedule.startDate) {
-      alert("Veuillez sélectionner au moins une date de début.");
+      setScheduleError("Veuillez sélectionner au moins une date de début.");
       return;
     }
 
@@ -70,7 +73,7 @@ export default function StepSchedule() {
     const endHour = parseInt(schedule.endTime.split(':')[0]);
 
     if (endHour <= startHour) {
-        alert("L'heure de fin doit être après l'heure de début.");
+        setScheduleError("L'heure de fin doit être après l'heure de début.");
         return;
     }
 
@@ -96,7 +99,8 @@ export default function StepSchedule() {
           return (
             <button
               key={option.id}
-              onClick={() => setSchedule({ ...schedule, frequency: option.id as any })}
+              aria-pressed={schedule.frequency === option.id}
+              onClick={() => setSchedule({ ...schedule, frequency: option.id as typeof schedule.frequency })}
               className={`
                 flex items-center justify-center rounded-xl border p-4 transition-all
                 ${isSelected 
@@ -117,7 +121,7 @@ export default function StepSchedule() {
       <div className="space-y-3">
         <label className="flex items-center justify-between text-sm font-medium text-slate-700">
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-teal-600" />
+            <Calendar className="h-4 w-4 text-teal-700" />
             Sélectionnez les dates
           </div>
           <span className="text-xs text-teal-700 bg-teal-50 px-2 py-1 rounded-full">
@@ -131,7 +135,7 @@ export default function StepSchedule() {
             
             let className = "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50"; 
             if (status === "selected") {
-              className = "border-teal-600 bg-teal-600 text-white shadow-md ring-2 ring-teal-200";
+              className = "border-teal-600 bg-teal-700 text-white shadow-md ring-2 ring-teal-200";
             } else if (status === "in-range") {
               className = "border-teal-200 bg-teal-50 text-teal-800";
             }
@@ -139,6 +143,8 @@ export default function StepSchedule() {
             return (
               <button
                 key={date.toISOString()}
+                aria-pressed={getDateStatus(date) === "selected"}
+                aria-label={date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
                 onClick={() => handleDateClick(date)}
                 className={`
                   flex flex-col items-center justify-center rounded-xl border py-3 transition-all
@@ -160,7 +166,7 @@ export default function StepSchedule() {
       {/* --- Time Selection (Precise Hours) --- */}
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-          <Clock className="h-4 w-4 text-teal-600" />
+          <Clock className="h-4 w-4 text-teal-700" />
           Créneau horaire
         </label>
         
@@ -170,8 +176,12 @@ export default function StepSchedule() {
                 <span className="text-xs text-slate-500 font-bold uppercase">De</span>
                 <div className="relative">
                     <select
+                        aria-label={"Heure de d\u00e9but"}
                         value={schedule.startTime}
-                        onChange={(e) => setSchedule({ ...schedule, startTime: e.target.value })}
+                        onChange={(e) => {
+                          setScheduleError(null);
+                          setSchedule({ ...schedule, startTime: e.target.value });
+                        }}
                         className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 font-bold text-slate-900 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
                     >
                         {hours.map((h) => (
@@ -181,7 +191,7 @@ export default function StepSchedule() {
                 </div>
             </div>
 
-            <div className="pt-5 text-slate-400">
+            <div className="pt-5 text-slate-500">
                 <ArrowRight className="h-5 w-5" />
             </div>
 
@@ -190,8 +200,12 @@ export default function StepSchedule() {
                 <span className="text-xs text-slate-500 font-bold uppercase">À</span>
                 <div className="relative">
                     <select
+                        aria-label={"Heure de fin"}
                         value={schedule.endTime}
-                        onChange={(e) => setSchedule({ ...schedule, endTime: e.target.value })}
+                        onChange={(e) => {
+                          setScheduleError(null);
+                          setSchedule({ ...schedule, endTime: e.target.value });
+                        }}
                         className="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-10 font-bold text-slate-900 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
                     >
                         {hours.map((h) => (
@@ -201,10 +215,16 @@ export default function StepSchedule() {
                 </div>
             </div>
         </div>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-500">
            Durée estimée : {Math.max(0, parseInt(schedule.endTime) - parseInt(schedule.startTime))} heures
         </p>
       </div>
+
+      {scheduleError && (
+        <p role="alert" className="text-sm font-medium text-red-600">
+          {scheduleError}
+        </p>
+      )}
 
       {/* --- Navigation --- */}
       <div className="flex gap-4 pt-6">
@@ -217,7 +237,7 @@ export default function StepSchedule() {
         </button>
         <button
           onClick={handleNext}
-          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-700 hover:shadow-xl"
+          className="group flex flex-[2] items-center justify-center rounded-full bg-teal-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-200 transition-all hover:bg-teal-800 hover:shadow-xl"
         >
           Vérifier la demande
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
