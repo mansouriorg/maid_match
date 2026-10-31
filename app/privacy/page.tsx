@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { business, shown } from "@/lib/business";
+import { DEMO_MODE, publisher } from "@/lib/business";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialit\u00e9",
-  description:
-    "Les informations recueillies lorsque vous demandez un devis et la raison pour laquelle elles sont recueillies.",
+  description: "Les donn\u00e9es du formulaire de r\u00e9servation et leur usage.",
 };
 
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-12">
-      <div className="mx-auto max-w-2xl space-y-8">
+      <div className="mx-auto max-w-2xl space-y-8 text-sm text-slate-700">
         <div>
           <Link
             href="/"
@@ -22,103 +21,84 @@ export default function PrivacyPage() {
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
             Politique de confidentialit&eacute;
           </h1>
-          <p className="mt-3 text-slate-700">
-            Cette page explique quelles informations nous recueillons lorsque
-            vous demandez un devis sur MaidMatch, et pourquoi.
-          </p>
         </div>
 
+        {DEMO_MODE && (
+          <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+            <h2 className="font-semibold">Projet de d&eacute;monstration</h2>
+            <p className="mt-1">
+              Ce site montre le fonctionnement d&rsquo;une application. N&rsquo;y
+              entrez pas de vraies donn&eacute;es personnelles : utilisez un nom,
+              un t&eacute;l&eacute;phone et une adresse fictifs.
+            </p>
+          </section>
+        )}
+
         <section className="space-y-2">
           <h2 className="text-xl font-semibold text-slate-900">
-            Responsable du traitement
+            Donn&eacute;es demand&eacute;es
           </h2>
-          <p className="text-slate-700">
-            Les informations recueillies sur ce site sont trait&eacute;es par{" "}
-            {shown(business.name)}, {shown(business.address)}. Contact&nbsp;:{" "}
-            {shown(business.email)}, {shown(business.phone)}.
+          <p>
+            Le formulaire de r&eacute;servation demande un nom, une adresse
+            e-mail, un num&eacute;ro de t&eacute;l&eacute;phone, l&rsquo;adresse
+            et la description du logement, ainsi que les dates et horaires
+            souhait&eacute;s.
           </p>
         </section>
 
         <section className="space-y-2">
           <h2 className="text-xl font-semibold text-slate-900">
-            Informations recueillies
+            Utilisation
           </h2>
-          <p className="text-slate-700">
-            Dans le formulaire de demande&nbsp;: votre nom, votre num&eacute;ro
-            de t&eacute;l&eacute;phone, votre adresse e-mail, l&rsquo;adresse et
-            le type de votre logement, le nombre de pi&egrave;ces et de salles
-            de bain, le type de prestation et les options choisies, ainsi que
-            les dates et horaires souhait&eacute;s.
+          <p>
+            Ces informations servent uniquement &agrave; montrer comment
+            l&rsquo;application traite une demande. Elles ne sont ni vendues,
+            ni transmises &agrave; des tiers, ni utilis&eacute;es pour de la
+            prospection.
           </p>
         </section>
 
         <section className="space-y-2">
           <h2 className="text-xl font-semibold text-slate-900">
-            Pourquoi nous les recueillons
+            Conservation
           </h2>
-          <p className="text-slate-700">
-            Ces informations nous permettent de vous rappeler pour
-            &eacute;tablir un devis, puis d&rsquo;organiser l&rsquo;intervention.
-            Ce traitement est n&eacute;cessaire pour r&eacute;pondre &agrave;
-            votre demande de devis (mesures pr&eacute;contractuelles).
+          <p>
+            Les donn&eacute;es de d&eacute;monstration peuvent &ecirc;tre
+            supprim&eacute;es &agrave; tout moment, notamment lorsque la
+            d&eacute;monstration est remise &agrave; z&eacute;ro.
           </p>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-semibold text-slate-900">
-            O&ugrave; elles sont enregistr&eacute;es
-          </h2>
-          <p className="text-slate-700">
-            Pendant que vous remplissez le formulaire, vos r&eacute;ponses sont
-            gard&eacute;es dans votre navigateur afin de ne pas &ecirc;tre
-            perdues si vous quittez la page. Elles sont remises &agrave; z&eacute;ro
-            apr&egrave;s l&rsquo;envoi de la demande. Lorsque vous envoyez la
-            demande, elles sont transmises &agrave; notre serveur.
-          </p>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-semibold text-slate-900">
-            Dur&eacute;e de conservation
-          </h2>
-          <p className="text-slate-700">{shown(business.retention)}</p>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-semibold text-slate-900">
-            Cookies et suivi
-          </h2>
-          <p className="text-slate-700">
-            Ce site ne d&eacute;pose pas de cookies de suivi et n&rsquo;utilise
-            pas d&rsquo;outil d&rsquo;analyse tiers.
+          <p>
+            Pendant que vous remplissez le formulaire, votre progression est
+            gard&eacute;e dans le stockage local de votre navigateur. Elle est
+            effac&eacute;e d&egrave;s que la demande est envoy&eacute;e.
           </p>
         </section>
 
         <section className="space-y-2">
           <h2 className="text-xl font-semibold text-slate-900">Vos droits</h2>
-          <p className="text-slate-700">
-            Vous disposez d&rsquo;un droit d&rsquo;acc&egrave;s, de
-            rectification, d&rsquo;effacement, d&rsquo;opposition, de limitation
-            du traitement et de portabilit&eacute; de vos donn&eacute;es. Pour
-            les exercer, contactez-nous&nbsp;: {shown(business.email)} ou{" "}
-            {shown(business.phone)}.
-          </p>
-          <p className="text-slate-700">
-            Si vous estimez, apr&egrave;s nous avoir contact&eacute;s, que vos
-            droits ne sont pas respect&eacute;s, vous pouvez introduire une
-            r&eacute;clamation aupr&egrave;s de la CNIL (www.cnil.fr).
-          </p>
-          <p className="text-slate-700">
-            Voir aussi nos{" "}
-            <Link
-              href="/mentions-legales"
-              className="font-medium text-teal-700 underline"
+          <p>
+            Pour faire supprimer une information envoy&eacute;e par erreur,
+            contactez l&rsquo;auteur du projet, {publisher.name}, via{" "}
+            <a
+              href={publisher.contactUrl}
+              className="font-medium text-teal-700 hover:underline"
             >
-              mentions l&eacute;gales
-            </Link>
+              {publisher.contactLabel}
+            </a>
             .
           </p>
         </section>
+
+        <p className="text-slate-600">
+          Voir aussi les{" "}
+          <Link
+            href="/mentions-legales"
+            className="font-medium text-teal-700 hover:underline"
+          >
+            mentions l&eacute;gales
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

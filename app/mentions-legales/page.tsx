@@ -1,31 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { business, shown } from "@/lib/business";
+import { DEMO_MODE, publisher } from "@/lib/business";
 
 export const metadata: Metadata = {
   title: "Mentions l\u00e9gales",
   description: "\u00c9diteur du site, h\u00e9bergeur et contact.",
 };
 
-function Row({
-  label,
-  value,
-  optional = false,
-}: {
-  label: string;
-  value: string;
-  optional?: boolean;
-}) {
-  const missing = value.trim() === "";
-  if (optional && missing) {
-    return null;
-  }
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-1 sm:grid-cols-3 sm:gap-4">
       <dt className="font-medium text-slate-900">{label}</dt>
-      <dd className={missing ? "text-amber-700 sm:col-span-2" : "text-slate-700 sm:col-span-2"}>
-        {shown(value)}
-      </dd>
+      <dd className="text-slate-700 sm:col-span-2">{children}</dd>
     </div>
   );
 }
@@ -46,52 +32,79 @@ export default function LegalNoticePage() {
           </h1>
         </div>
 
+        {DEMO_MODE && (
+          <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <h2 className="font-semibold">Projet de d&eacute;monstration</h2>
+            <p className="mt-1">
+              MaidMatch est un projet de portfolio r&eacute;alis&eacute; par{" "}
+              {publisher.name}. Ce n&rsquo;est pas une entreprise : aucune
+              prestation de m&eacute;nage n&rsquo;est propos&eacute;e ni vendue,
+              et les demandes envoy&eacute;es depuis ce site ne sont pas
+              trait&eacute;es.
+            </p>
+          </section>
+        )}
+
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-slate-900">
             &Eacute;diteur du site
           </h2>
           <dl className="space-y-3 text-sm">
-            <Row label="Nom ou raison sociale" value={business.name} />
-            <Row label="Forme juridique" value={business.legalForm} />
-            <Row label="Adresse" value={business.address} />
-            <Row label="E-mail" value={business.email} />
-            <Row label={"T\u00e9l\u00e9phone"} value={business.phone} />
-            <Row label="SIREN ou SIRET" value={business.registration} />
-            <Row
-              label="TVA intracommunautaire"
-              value={business.vatNumber}
-              optional
-            />
-            <Row
-              label="Directeur de la publication"
-              value={business.publicationDirector}
-            />
+            <Row label="Nom">{publisher.name}</Row>
+            <Row label="Statut">
+              {DEMO_MODE
+                ? "Projet personnel de d\u00e9monstration, sans activit\u00e9 commerciale"
+                : "Voir les informations de l\u2019entreprise"}
+            </Row>
+            <Row label="Contact">
+              <a
+                href={publisher.contactUrl}
+                className="font-medium text-teal-700 hover:underline"
+              >
+                {publisher.contactLabel}
+              </a>
+            </Row>
+            <Row label="Directeur de la publication">{publisher.name}</Row>
           </dl>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-slate-900">
-            H&eacute;bergeur
+            H&eacute;bergement
           </h2>
-          <dl className="space-y-3 text-sm">
-            <Row label="Nom" value={business.hostName} />
-            <Row label="Adresse" value={business.hostAddress} />
-          </dl>
+          <p className="text-sm text-slate-700">
+            {publisher.hostName === ""
+              ? "Le site n\u2019est pas encore h\u00e9berg\u00e9 publiquement."
+              : `${publisher.hostName}, ${publisher.hostAddress}`}
+          </p>
         </section>
 
-        <section className="space-y-2">
+        <section className="space-y-3">
           <h2 className="text-xl font-semibold text-slate-900">
-            Donn&eacute;es personnelles
+            Code source
           </h2>
-          <p className="text-slate-700">
-            Pour savoir comment vos informations sont utilis&eacute;es, consultez
-            notre{" "}
-            <Link href="/privacy" className="font-medium text-teal-700 underline">
-              politique de confidentialit&eacute;
-            </Link>
+          <p className="text-sm text-slate-700">
+            Le code de ce projet est consultable sur{" "}
+            <a
+              href={publisher.sourceUrl}
+              className="font-medium text-teal-700 hover:underline"
+            >
+              GitHub
+            </a>
             .
           </p>
         </section>
+
+        <p className="text-sm text-slate-600">
+          Voir aussi la{" "}
+          <Link
+            href="/privacy"
+            className="font-medium text-teal-700 hover:underline"
+          >
+            politique de confidentialit&eacute;
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

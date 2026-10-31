@@ -22,7 +22,10 @@ This is one of three projects that work together:
   always computes the final price again; the site never decides it.
 - Messages appear in the page, next to the field concerned, instead of pop-ups.
 - Legal notice and privacy pages (`/mentions-legales` and `/privacy`). All the
-  company details come from one file, `lib/business.ts`.
+  publisher details come from one file, `lib/business.ts`.
+- Demo mode: this is a portfolio project, so a banner on every page says so,
+  the legal pages name the author, and search engines are asked not to index
+  the site. `DEMO_MODE` in `lib/business.ts` turns this off for a real business.
 - Search and sharing: page titles and descriptions, `sitemap.xml`,
   `robots.txt`, and a sharing picture generated at build time.
 - Accessibility: every field has a label, buttons have names, selected options

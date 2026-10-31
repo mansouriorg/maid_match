@@ -1,28 +1,23 @@
-// Details of the business that publishes the site. They are shown on the legal
-// notice (mentions legales) and on the privacy page. A field left empty is shown
-// on the page as "[a completer]", so fill in every field before the site goes
-// online. The legal notice is required by French law for a professional site.
-export const business = {
-  // Company name, or first and last name of the person who runs the business
-  name: "",
-  // For example: auto-entrepreneur, SAS, SARL
-  legalForm: "",
-  address: "",
-  email: "",
-  phone: "",
-  // SIREN or SIRET number
-  registration: "",
-  // VAT number. Leave empty if you have none (the line is then hidden).
-  vatNumber: "",
-  publicationDirector: "",
-  // The company that hosts the site (for example Vercel Inc.) and its address
+// Who publishes the site. MaidMatch is a portfolio project: no service is
+// sold, and the booking form only shows how the application works.
+// These details are shown on the legal notice and on the privacy page.
+//
+// DEMO_MODE shows a banner on every page, keeps the site out of search
+// results, and explains on the legal pages that this is a demonstration.
+// Set it to false only for a real business, after replacing these details
+// with the real company details required by French law.
+export const DEMO_MODE: boolean = true;
+
+export const publisher = {
+  // The author of the project
+  name: "Mahmoud Mansouri",
+  // Where visitors can reach the author (no personal e-mail on a public demo)
+  contactLabel: "GitHub",
+  contactUrl: "https://github.com/mansouriorg",
+  // Where the source code can be read
+  sourceUrl: "https://github.com/mansouriorg",
+  // The company that hosts the site once it is online, and its address
+  // (for example Vercel Inc.). While empty, the page says it is not online.
   hostName: "",
   hostAddress: "",
-  // How long the booking requests are kept (for example: 3 years after the last contact)
-  retention: "",
 };
-
-// The text shown for a detail that is not filled in yet.
-export function shown(value: string): string {
-  return value.trim() === "" ? "[\u00e0 compl\u00e9ter]" : value;
-}
