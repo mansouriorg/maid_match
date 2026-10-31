@@ -16,9 +16,8 @@ export default function StepSummary() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // NOUVEAU : États pour la tarification dynamique
-  const [hourlyRate, setHourlyRate] = useState<number | null>(null);
-  const [isLoadingPrice, setIsLoadingPrice] = useState(true);
+  // The price estimate from the API, with the choices it was computed for
+  const [quote, setQuote] = useState<{ key: string; total: number | null } | null>(null);
 
   // --- HELPER MAPS ---
   const typeLabels: Record<string, string> = {
@@ -44,52 +43,39 @@ export default function StepSummary() {
     keys: "Clés au gardien",
   };
 
-  // --- NOUVEAU : CHARGEMENT DU PRIX DEPUIS LE BACKEND ---
+  // --- PRICE ESTIMATE FROM THE API ---
+  // The API computes it with the same formula and hourly rate as the price
+  // saved with the booking, so the two always match.
+  const durationForQuote = getDurationHours();
+  const extrasKey = (property.extras ?? []).join(",");
+  const quoteKey = [property.cleaningType, durationForQuote, property.hasSupplies, extrasKey].join("|");
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const res = await api.get("/settings");
-        if (res.data && res.data.defaultHourlyRate) {
-          setHourlyRate(res.data.defaultHourlyRate);
-        } else {
-          setHourlyRate(15); // Fallback
+    let active = true;
+    api
+      .post("/service-requests/quote", {
+        cleaningType: property.cleaningType,
+        durationHours: durationForQuote,
+        hasSupplies: property.hasSupplies,
+        extras: extrasKey === "" ? [] : extrasKey.split(","),
+      })
+      .then((res) => {
+        if (active) {
+          const total = res.data?.totalPrice;
+          setQuote({ key: quoteKey, total: typeof total === "number" ? total : null });
         }
-      } catch (error) {
-        console.error("Erreur de récupération du tarif :", error);
-        setHourlyRate(15); // Fallback de sécurité en cas d'erreur réseau
-      } finally {
-        setIsLoadingPrice(false);
-      }
+      })
+      .catch(() => {
+        // The API cannot be reached: the price is confirmed later by the team.
+        if (active) {
+          setQuote({ key: quoteKey, total: null });
+        }
+      });
+    return () => {
+      active = false;
     };
-    fetchSettings();
-  }, []);
-
-  // --- NOUVEAU : CALCUL DU PRIX TOTAL ---
-  const calculateTotal = () => {
-    if (hourlyRate === null) return 0;
-    
-    let currentRate = hourlyRate;
-    const durationHours = getDurationHours();
-
-    // Majoration pour le Deep Clean
-    if (property.cleaningType === 'deep') {
-      currentRate += 5;
-    }
-
-    let total = durationHours * currentRate;
-
-    // Frais fixes si aucun matériel n'est fourni
-    if (!property.hasSupplies) {
-      total += 20; 
-    }
-
-    // Frais pour les extras (10 euros par extra)
-    if (property.extras && property.extras.length > 0) {
-      total += (property.extras.length * 10); 
-    }
-
-    return total;
-  };
+  }, [quoteKey, property.cleaningType, property.hasSupplies, durationForQuote, extrasKey]);
+  const isLoadingPrice = quote === null || quote.key !== quoteKey;
+  const estimate = quote !== null && quote.key === quoteKey ? quote.total : null;
 
   // --- LOGIC FOR DATE DISPLAY ---
   const renderDate = () => {
@@ -271,7 +257,7 @@ export default function StepSummary() {
                  <Loader2 className="h-6 w-6 animate-spin text-teal-700 mx-auto sm:ml-auto sm:mr-0" />
              ) : (
                  <div className="text-3xl font-extrabold text-teal-700">
-                    {calculateTotal()} <span className="text-lg font-bold text-teal-700">&euro;</span>
+                    {estimate === null ? <span className="text-base font-semibold">Prix confirm&eacute; par l&rsquo;&eacute;quipe</span> : <>{estimate} <span className="text-lg font-bold text-teal-700">&euro;</span></>}
                  </div>
              )}
          </div>
