@@ -135,6 +135,10 @@ export default function StepSummary() {
         extras: property.extras || [],
         
         startTime: combinedDate.toISOString(),
+        // The last day the customer is available (sent only when a period was chosen).
+        endDate: schedule.endDate
+          ? new Date(new Date(schedule.endDate).setHours(startHour, 0, 0, 0)).toISOString()
+          : undefined,
         durationHours: duration,
         frequency: schedule.frequency,
         
